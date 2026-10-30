@@ -185,8 +185,9 @@ async function load(force){
     for (const r of str){   /* STR ref (A) + number (B), e.g. WLC + 1004 = WLC1004 */
       const num = parseInt(clean(r[1]).replace(/,/g, ""), 10);
       if (clean(r[0]) && !isNaN(num) && clean(r[6])) CAT[key(r[0]) + num] = clean(r[6]).toUpperCase();
+      if (clean(r[3]) && clean(r[6])) CAT[key(r[3])] = CAT[key(r[3])] || clean(r[6]).toUpperCase();   /* fallback: serial no. */
     }
-    for (const r of slr) if (/^MPL/i.test(clean(r[0]))) INFO[key(r[0])] = {batch:key(r[3])};   /* SLR batch no. (D) */
+    for (const r of slr) if (/^MPL/i.test(clean(r[0]))) INFO[key(r[0])] = {batch:key(r[3]), serial:key(r[5])};   /* SLR batch no. (D), serial (F) */
   } catch(e){}
 }
 
@@ -213,10 +214,10 @@ const kv = (k, v, cls="", row="") => `<div class="kv ${row}"><div class="k">${k}
 
 function productText(r){
   const i = INFO[key(r[C.mpl])]; if (!i) return "—";
-  const c = CAT[i.batch]; return c ? "Laptop / " + esc(titleCase(c)) : "Laptop";
+  const c = CAT[i.batch] || CAT[i.serial]; return c ? "Laptop / " + esc(titleCase(c)) : "Laptop";
 }
 function warranty(r, idx){
-  const i = INFO[key(r[C.mpl])], c = i && CAT[i.batch];
+  const i = INFO[key(r[C.mpl])], c = i && (CAT[i.batch] || CAT[i.serial]);
   if (!c || !(c in CONFIG.WARRANTY)) return "—";
   const m = CONFIG.WARRANTY[c]; if (!m) return "No warranty";
   const d = parseDate(r[C.invDate]); if (!d) return "—";
