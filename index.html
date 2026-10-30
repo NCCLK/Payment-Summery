@@ -4,55 +4,61 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<meta name="color-scheme" content="light dark">
-<title>Customer Account Summary</title>
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#0057b8">
+<title>NCC – Customer Account Summary</title>
+<link rel="icon" href="logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--paper:#f6f5f1;--card:#fff;--ink:#1c2321;--muted:#5d6763;--line:#dfddd6;--brand:#0f5c4d;--brand-ink:#fff;--brand-soft:#e3f0ec;--late:#b3261e;--late-soft:#fbe9e7;--ok:#1d6b3a;--ok-soft:#e5f3ea;--warn:#8a5a00;--warn-soft:#fdf1d8;--sans:"Public Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
-@media (prefers-color-scheme:dark){:root{--paper:#121614;--card:#1b211f;--ink:#e9eeec;--muted:#9aa6a1;--line:#2d3532;--brand:#1f7a66;--brand-soft:#1e332d;--late:#ff8a80;--late-soft:#3a1f1d;--ok:#7fd69c;--ok-soft:#1d3226;--warn:#f2c26b;--warn-soft:#38301a}}
+:root{--paper:#f3f8fc;--card:#fff;--ink:#14263a;--muted:#5a6b7c;--line:#d5e3ef;--sky:#00a3e8;--blue:#0057b8;--navy:#0b3a7a;--soft:#eaf5fc;--late:#c62828;--late-soft:#fdecea;--ok:#1b7a43;--ok-soft:#e6f4ec;--warn:#8a5a00;--warn-soft:#fdf1d8;--grad:linear-gradient(90deg,var(--sky),var(--blue));--sans:"Public Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--paper);color:var(--ink);font:400 15px/1.5 var(--sans);padding-bottom:env(safe-area-inset-bottom,0px)}
 .num{font-variant-numeric:tabular-nums}
 button,input{font:inherit;color:inherit}
-.bar{position:sticky;top:0;z-index:5;background:var(--brand);color:var(--brand-ink);padding:calc(12px + env(safe-area-inset-top,0px)) 16px 14px}
-.bar-in{max-width:760px;margin:0 auto}
-.bar h1{margin:0 0 10px;font:600 16px/1.2 var(--sans)}
-.search{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.search input{grid-column:1/-1;min-width:0;height:48px;border-radius:10px;border:2px solid transparent;background:#fff;color:#14201c;padding:0 14px;font-size:18px;font-weight:600;letter-spacing:.02em}
-.search input::placeholder{font-weight:400;letter-spacing:0;color:#74807b;font-size:15px}
-.search input:focus-visible,.search button:focus-visible{outline:3px solid #ffd54a;outline-offset:1px}
-.search button{height:48px;border-radius:10px;border:0;background:#14201c;color:#fff;font-weight:600;cursor:pointer}
-.search button:disabled{opacity:.55;cursor:default}
-.search .print-btn{background:#fff;color:#14201c}
-@media (min-width:640px){.search{grid-template-columns:1fr 1fr auto auto}.search input{grid-column:auto}.search button{padding:0 20px}}
+.in{max-width:760px;margin:0 auto}
+.top{background:#fff;padding:calc(10px + env(safe-area-inset-top,0px)) 16px 10px;border-bottom:4px solid var(--blue)}
+.top .in{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{height:54px;width:auto;display:block}
+.ttl{font-weight:700;font-size:15px;color:var(--navy);text-align:right;line-height:1.2}
+.bar{background:var(--grad);padding:14px 16px 16px;color:#fff}
+.search{display:grid;grid-template-columns:1fr;gap:8px}
+.search input{min-width:0;height:48px;border-radius:10px;border:2px solid transparent;background:#fff;color:#0b1f33;padding:0 14px;font-size:18px;font-weight:600;letter-spacing:.02em}
+.search input::placeholder{font-weight:400;letter-spacing:0;color:#6b7b8b;font-size:15px}
+.search input:focus-visible,.btns button:focus-visible{outline:3px solid #ffd54a;outline-offset:1px}
+@media (min-width:560px){.search{grid-template-columns:1fr 1fr}.btns{grid-column:1/-1}}
+.btns{display:flex;gap:8px}
+.btns button{height:48px;border-radius:10px;border:0;font-weight:700;cursor:pointer;flex:1;background:#fff;color:var(--blue)}
+.btns #go{flex:2;background:var(--navy);color:#fff}
+.btns button:disabled{opacity:.55;cursor:default}
 main{max-width:760px;margin:0 auto;padding:16px 16px 40px}
-.msg{padding:28px 8px;text-align:center;color:var(--muted)}
+.msg{padding:24px 8px;text-align:center;color:var(--muted)}
 .msg b{color:var(--ink);display:block;font-size:17px;margin-bottom:4px}
+.msg img{width:72px;height:72px;display:block;margin:0 auto 10px}
 .msg.err{background:var(--late-soft);color:var(--late);border-radius:12px;padding:16px;text-align:left}
 .msg.err b{color:var(--late)}
 .asof{font-size:12.5px;color:var(--muted);text-align:right;margin:0 2px 8px}
 .ph{display:none}
 .sheet{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:16px}
-.sheet:first-of-type{margin-top:0}
-.sec{background:var(--brand);color:var(--brand-ink);font-weight:700;font-size:14px;padding:10px 14px}
-.sec.late{background:var(--late);color:#fff}
+.asof+.sheet,.sheet:first-child{margin-top:0}
+.sec{background:var(--grad);color:#fff;font-weight:800;font-size:14px;letter-spacing:.05em;text-transform:uppercase;padding:11px 14px}
+.sec.late{background:var(--late)}
 .kv{display:grid;grid-template-columns:minmax(130px,42%) 1fr;border-top:1px solid var(--line)}
 .sec+.kv{border-top:0}
-.kv .k{padding:9px 14px;color:var(--muted);font-size:14px;background:var(--brand-soft);border-right:1px solid var(--line)}
+.kv .k{padding:9px 14px;color:var(--muted);font-size:14px;background:var(--soft);border-right:1px solid var(--line)}
 .kv .v{padding:9px 14px;font-weight:600;overflow-wrap:anywhere}
 .kv .v.red{color:var(--late)}
-.kv.name .v{font-size:18px}
+.kv.name .v{font-size:18px;color:var(--navy)}
 .kv.strong .k{color:var(--ink);font-weight:600}
 .kv.strong .v{background:var(--late-soft);color:var(--late)}
 .kv.strong.okrow .v{background:var(--ok-soft);color:var(--ok)}
 .sub{font-weight:400;font-size:12.5px;color:var(--muted)}
 .ihead,.ig{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
-.ihead>div{background:var(--brand-soft);color:var(--muted);font-size:12.5px;font-weight:600;padding:8px 10px;text-align:right}
+.ihead>div{background:var(--soft);color:var(--navy);font-size:12.5px;font-weight:700;padding:8px 10px;text-align:right}
 .ins{border-top:1px solid var(--line)}
-.ins-t{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 14px 0;font-weight:700}
+.ins-t{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 14px 0;font-weight:700;color:var(--navy)}
 .ig>div{padding:4px 10px 10px;text-align:right;font-weight:600;overflow-wrap:anywhere}
 .ig .d{display:block;font-weight:400;font-size:12.5px;color:var(--muted)}
 .ig .red{color:var(--late)}
@@ -63,36 +69,38 @@ main{max-width:760px;margin:0 auto;padding:16px 16px 40px}
 .tag.none{color:var(--muted);font-weight:500;padding:0}
 .note{padding:12px 14px;font-size:14px;background:var(--warn-soft);color:var(--warn)}
 footer{margin-top:20px;font-size:12px;color:var(--muted);text-align:center}
-footer button{background:none;border:0;color:var(--brand);font-weight:600;cursor:pointer;padding:8px 10px;text-decoration:underline}
-@media (prefers-color-scheme:dark){footer button{color:#5cc2a8}}
+footer button{background:none;border:0;color:var(--blue);font-weight:600;cursor:pointer;padding:8px 10px;text-decoration:underline}
+#toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--navy);color:#fff;padding:10px 18px;border-radius:99px;font-weight:600;font-size:14px;z-index:9}
 [hidden]{display:none!important}
-@media (max-width:380px){.kv{grid-template-columns:1fr}.kv .k{border-right:0;padding-bottom:2px}.kv .v{padding-top:2px}.ig>div,.ihead>div{padding-left:6px;padding-right:6px}}
+@media (max-width:380px){.kv{grid-template-columns:1fr}.kv .k{border-right:0;padding-bottom:2px}.kv .v{padding-top:2px}.ig>div,.ihead>div{padding-left:6px;padding-right:6px}.logo{height:44px}}
 @page{size:A4;margin:12mm}
 @media print{
   *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  :root{--paper:#fff;--card:#fff;--ink:#000;--muted:#444;--line:#999;--brand:#0f5c4d;--brand-ink:#fff;--brand-soft:#eef3f1;--late:#b3261e;--late-soft:#fff;--ok:#1d6b3a;--ok-soft:#fff;--warn:#000;--warn-soft:#fff}
   body{background:#fff;font-size:12.5px}
-  .bar,footer{display:none!important}
+  .top,.bar,footer,#toast{display:none!important}
   main{max-width:none;padding:0}
-  .ph{display:block;margin-bottom:10px;border-bottom:2px solid #0f5c4d;padding-bottom:6px}
-  .ph h2{margin:0;font-size:18px}.ph p{margin:2px 0 0;color:#444;font-size:12px}
-  .sheet{break-inside:avoid;border-color:#888;border-radius:0}
+  .ph{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px;border-bottom:3px solid var(--blue);padding-bottom:6px}
+  .ph img{height:46px}.ph h2{margin:0;font-size:16px;color:var(--navy);text-align:right}.ph p{margin:2px 0 0;color:#444;font-size:11.5px;text-align:right}
+  .sheet{break-inside:avoid;border-radius:0}
   .ins{break-inside:avoid}
-  .kv.strong .v{border-top:1px solid #999}
 }
 </style>
 </head>
 <body>
-<header class="bar"><div class="bar-in">
-  <h1>Customer account summary</h1>
+<header class="top"><div class="in"><img class="logo" src="logo.png" alt="NCC – The Smart Choice"><div class="ttl">Customer payment<br>summary</div></div></header>
+<section class="bar"><div class="in">
   <form class="search" id="form" autocomplete="off">
     <input id="mpl" type="text" autocapitalize="characters" autocorrect="off" spellcheck="false" placeholder="MPL No. (e.g. MPLNCC1015)" aria-label="MPL No." enterkeyhint="next" required>
     <input id="mobile" type="tel" inputmode="tel" placeholder="Mobile number (e.g. 077 123 4567)" aria-label="Mobile number" enterkeyhint="search" required>
-    <button id="go" type="submit">Search</button>
-    <button class="print-btn" type="button" id="print" disabled>Print</button>
+    <div class="btns">
+      <button id="go" type="submit">Search</button>
+      <button type="button" id="print" disabled>Print</button>
+      <button type="button" id="share" disabled>Share link</button>
+    </div>
   </form>
-</div></header>
-<main id="out" aria-live="polite"><div class="msg"><b>Enter your MPL number and mobile number</b>Your payment summary will appear here.</div></main>
+</div></section>
+<main id="out" aria-live="polite"><div class="msg"><img src="support.png" alt=""><b>Enter your MPL number and mobile number</b>Your payment summary will appear here.</div></main>
+<div id="toast" role="status" hidden></div>
 
 <script>
 /* ============ SETTINGS ============
@@ -113,7 +121,7 @@ const C = { invDate:2, mpl:4, name:5, contact:6, paid:8, invoice:9, balance:10, 
   lateStatus:34, insAmt:35, overdue:36, gain:37, totalOver:38, latePaid:39, running:40, capPaid:41, discount:42 };
 
 const $ = id => document.getElementById(id);
-const out = $("out"), mplIn = $("mpl"), mobIn = $("mobile"), btn = $("go"), prn = $("print");
+const out = $("out"), mplIn = $("mpl"), mobIn = $("mobile"), btn = $("go"), prn = $("print"), shr = $("share");
 const clean = s => (s ?? "").toString().trim();
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const key = s => clean(s).replace(/\s+/g, "").toUpperCase();
@@ -235,7 +243,7 @@ function render(r){
   const account = `<div class="sheet">
     ${kv("MPL No.", esc(g(C.mpl)))}
     ${kv("Name", esc(g(C.name)) || "—", "", "name")}
-    <div class="sec">Customer Account Summary</div>
+    <div class="sec">CUSTOMER ACCOUNT SUMMARY</div>
     ${kv("Invoice Value (Rs.)", money(invoice))}
     ${kv("Total Paid (Rs.)", money(paid))}
     ${kv("Balance Due (Rs.)", money(bal) + (bal < 0 ? ' <span class="sub">excess paid</span>' : ""), bal > 0 ? "red" : "")}
@@ -276,7 +284,7 @@ function render(r){
         <div class="${rowBal > 0 ? "red" : ""}">${plain(rowBal)}<span class="d">&nbsp;</span></div>
       </div></div>`;
   }
-  const instal = `<div class="sheet"><div class="sec">Monthly Instalment Summary</div>
+  const instal = `<div class="sheet"><div class="sec">MONTHLY INSTALMENT SUMMARY</div>
     <div class="ihead"><div>Due (Rs.)</div><div>Paid (Rs.)</div><div>Balance (Rs.)</div></div>
     ${rows || '<div class="note">No instalments recorded for this account.</div>'}</div>`;
 
@@ -291,43 +299,61 @@ function render(r){
       kv("Instalments Paid (Rs.)", money(capPaid)) + kv("Final Outstanding (Rs.)", money(fin), "", "strong" + (fin > 0 ? "" : " okrow"));
   } else lateHtml = '<div class="note">Overdue and late charge details are not available for this account yet. Please contact us for a full statement.</div>';
 
-  const late = `<div class="sheet"><div class="sec late">Overdue &amp; Late Charges Summary</div>${lateHtml}</div>`;
-  out.innerHTML = `<div class="ph"><h2>Customer Account Summary</h2><p>${esc(g(C.mpl))} · ${esc(g(C.name))} · Printed ${esc(fmtDate(new Date()))}</p></div>
+  const late = `<div class="sheet"><div class="sec late">OVERDUE &amp; LATE CHARGES SUMMARY</div>${lateHtml}</div>`;
+  out.innerHTML = `<div class="ph"><img src="logo.png" alt="NCC"><div><h2>CUSTOMER ACCOUNT SUMMARY</h2><p>${esc(g(C.mpl))} · ${esc(g(C.name))} · Printed ${esc(fmtDate(new Date()))}</p></div></div>
     ${ASOF ? `<p class="asof">Interest calculated up to ${esc(showDate(ASOF) || ASOF)}</p>` : ""}
     ${account}${instal}${late}
     <footer><button type="button" id="refresh">Refresh from sheet</button><button type="button" id="clear">New search</button></footer>`;
-  prn.disabled = false;
+  prn.disabled = shr.disabled = false;
   $("refresh").onclick = () => search(mplIn.value, mobIn.value, true);
-  $("clear").onclick = () => { out.innerHTML = START; prn.disabled = true; mplIn.value = mobIn.value = ""; mplIn.focus(); };
+  $("clear").onclick = () => { history.replaceState(null, "", location.href.split("#")[0]); out.innerHTML = START; lock(); mplIn.value = mobIn.value = ""; mplIn.focus(); };
   window.scrollTo({top:0});
 }
 
 const START = out.innerHTML;
+let LAST = null;
+function lock(){ prn.disabled = shr.disabled = true; }
+function toast(t){ const e = $("toast"); e.textContent = t; e.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => e.hidden = true, 2200); }
+shr.addEventListener("click", async () => {
+  if (!LAST) return;
+  const url = location.href.split("#")[0] + "#" + new URLSearchParams({mpl:LAST.mpl, mobile:LAST.mob});
+  try { if (navigator.share){ await navigator.share({title:"NCC – Customer Account Summary", url}); return; } }
+  catch(e){ if (e && e.name === "AbortError") return; }
+  try { await navigator.clipboard.writeText(url); toast("Link copied"); }
+  catch(e){ window.prompt("Copy this link", url); }
+});
+function fromHash(){
+  const p = new URLSearchParams(location.hash.slice(1)), m = p.get("mpl"), b = p.get("mobile");
+  if (m && b){ mplIn.value = m; mobIn.value = b; search(m, b); return true; }
+  return false;
+}
 function showError(kind){
   const m = {
     access:["Can't read the sheet","The Google Sheet must be shared as “Anyone with the link – Viewer”, and the tab names in CONFIG must match exactly."],
     shape:["Sheet layout not recognised","The MPL-ACS tab does not look as expected. Check CONFIG.TABS.acs and that column E holds the MPL numbers."],
     network:["Couldn't reach Google Sheets","Check your internet connection and try again."]
   }[kind] || ["Something went wrong","Please try again."];
-  out.innerHTML = `<div class="msg err"><b>${m[0]}</b>${m[1]}</div>`; prn.disabled = true;
+  out.innerHTML = `<div class="msg err"><b>${m[0]}</b>${m[1]}</div>`; lock();
 }
 async function search(mplV, mobV, force){
   if (!clean(mplV) || !normalizeMobile(mobV)){
     out.innerHTML = `<div class="msg"><b>Enter both details</b>Type the MPL number and a Sri Lankan mobile number: 9 digits, 10 digits starting with 0, or +94 format.</div>`;
-    prn.disabled = true; return;
+    lock(); return;
   }
   btn.disabled = true; btn.textContent = "Loading…";
   try {
     await load(force);
     const r = find(mplV, mobV);
-    if (r) render(r);
-    else { prn.disabled = true; out.innerHTML = `<div class="msg"><b>No matching customer found</b>The MPL number and mobile number must both belong to the same account. Check both and try again.</div>`; }
+    if (r){ LAST = {mpl:clean(mplV), mob:clean(mobV)}; render(r);
+      history.replaceState(null, "", location.href.split("#")[0] + "#" + new URLSearchParams({mpl:LAST.mpl, mobile:LAST.mob})); }
+    else { lock(); out.innerHTML = `<div class="msg"><img src="support.png" alt=""><b>No matching customer found</b>The MPL number and mobile number must both belong to the same account. Check both and try again, or contact NCC customer support.</div>`; }
   } catch(e){ showError(e.message); }
   finally { btn.disabled = false; btn.textContent = "Search"; }
 }
 $("form").addEventListener("submit", e => { e.preventDefault(); search(mplIn.value, mobIn.value); document.activeElement.blur(); });
 prn.addEventListener("click", () => window.print());
-if (matchMedia("(hover:hover)").matches) mplIn.focus();
+window.addEventListener("hashchange", fromHash);
+if (!fromHash() && matchMedia("(hover:hover)").matches) mplIn.focus();
 </script>
 </body>
 </html>
