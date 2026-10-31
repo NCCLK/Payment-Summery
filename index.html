@@ -5,14 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <meta name="color-scheme" content="light">
-<meta name="theme-color" content="#0057b8">
+<meta name="theme-color" content="#0072ad">
 <title>NCC – Customer Account Summary</title>
 <link rel="icon" href="logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=Noto+Sans+Sinhala:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--paper:#f3f8fc;--card:#fff;--ink:#14263a;--muted:#5a6b7c;--line:#d5e3ef;--sky:#00a3e8;--blue:#0057b8;--navy:#0b3a7a;--soft:#eaf5fc;--late:#c62828;--late-soft:#fdecea;--ok:#1b7a43;--ok-soft:#e6f4ec;--warn:#8a5a00;--warn-soft:#fdf1d8;--grad:linear-gradient(90deg,var(--sky),var(--blue));--sans:"Public Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+:root{--paper:#f3f8fc;--card:#fff;--ink:#14263a;--muted:#5a6b7c;--line:#d5e3ef;--sky:#039feb;--blue:#0072ad;--navy:#005a8c;--soft:#eaf5fc;--late:#c62828;--late-soft:#fdecea;--ok:#1b7a43;--ok-soft:#e6f4ec;--warn:#8a5a00;--warn-soft:#fdf1d8;--grad:var(--blue);--sans:"Public Sans","Noto Sans Sinhala",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--paper);color:var(--ink);font:400 15px/1.5 var(--sans);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -22,7 +22,15 @@ button,input{font:inherit;color:inherit}
 .top{background:#fff;padding:calc(10px + env(safe-area-inset-top,0px)) 16px 10px;border-bottom:4px solid var(--blue)}
 .top .in{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .logo{height:54px;width:auto;display:block}
-.ttl{font-weight:700;font-size:15px;color:var(--navy);text-align:right;line-height:1.2}
+.hd{display:flex;flex-direction:column;align-items:flex-end;gap:7px}
+.ttl{font-weight:700;font-size:15px;color:var(--navy);text-align:right;line-height:1.25;text-transform:uppercase;letter-spacing:.03em}
+.tools{display:flex;align-items:center;gap:8px}
+.ver{font-size:11.5px;font-weight:700;color:var(--blue);background:var(--soft);border:1px solid var(--line);border-radius:99px;padding:2px 9px;white-space:nowrap}
+.lang{display:inline-flex;border:1.5px solid var(--blue);border-radius:99px;overflow:hidden}
+.lang button{border:0;background:#fff;color:var(--blue);font-weight:700;font-size:13px;padding:5px 12px;cursor:pointer;min-height:32px}
+.lang button[aria-pressed=true]{background:var(--blue);color:#fff}
+.lang button:focus-visible{outline:3px solid #ffd54a;outline-offset:-3px}
+html[lang=si] .sec,html[lang=si] .ttl{letter-spacing:0}
 .bar{background:var(--grad);padding:14px 16px 16px;color:#fff}
 .search{display:grid;grid-template-columns:1fr;gap:8px}
 .search input{min-width:0;height:48px;border-radius:10px;border:2px solid transparent;background:#fff;color:#0b1f33;padding:0 14px;font-size:18px;font-weight:600;letter-spacing:.02em}
@@ -30,7 +38,7 @@ button,input{font:inherit;color:inherit}
 .search input:focus-visible,.btns button:focus-visible{outline:3px solid #ffd54a;outline-offset:1px}
 @media (min-width:560px){.search{grid-template-columns:1fr 1fr}.btns{grid-column:1/-1}}
 .btns{display:flex;gap:8px}
-.btns button{height:48px;border-radius:10px;border:0;font-weight:700;cursor:pointer;flex:1;background:#fff;color:var(--blue)}
+.btns button{height:48px;border-radius:10px;border:2px solid #fff;font-weight:700;cursor:pointer;flex:1;background:#fff;color:var(--navy)}
 .btns #go{flex:2;background:var(--navy);color:#fff}
 .btns button:disabled{opacity:.55;cursor:default}
 main{max-width:760px;margin:0 auto;padding:16px 16px 40px}
@@ -41,6 +49,7 @@ main{max-width:760px;margin:0 auto;padding:16px 16px 40px}
 .msg.err b{color:var(--late)}
 .asof{font-size:12.5px;color:var(--muted);text-align:right;margin:0 2px 8px}
 .ph{display:none}
+.pinv{display:none}
 .sheet{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:16px}
 .asof+.sheet,.sheet:first-child{margin-top:0}
 .sec{background:var(--grad);color:#fff;font-weight:800;font-size:14px;letter-spacing:.05em;text-transform:uppercase;padding:11px 14px}
@@ -72,7 +81,7 @@ footer{margin-top:20px;font-size:12px;color:var(--muted);text-align:center}
 footer button{background:none;border:0;color:var(--blue);font-weight:600;cursor:pointer;padding:8px 10px;text-decoration:underline}
 #toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--navy);color:#fff;padding:10px 18px;border-radius:99px;font-weight:600;font-size:14px;z-index:9}
 [hidden]{display:none!important}
-@media (max-width:380px){.kv{grid-template-columns:1fr}.kv .k{border-right:0;padding-bottom:2px}.kv .v{padding-top:2px}.ig>div,.ihead>div{padding-left:6px;padding-right:6px}.logo{height:44px}}
+@media (max-width:380px){.kv{grid-template-columns:1fr}.kv .k{border-right:0;padding-bottom:2px}.kv .v{padding-top:2px}.ig>div,.ihead>div{padding-left:6px;padding-right:6px}.logo{height:44px}.lang button{padding:5px 10px}}
 @page{size:A4;margin:12mm}
 @media print{
   *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
@@ -83,42 +92,212 @@ footer button{background:none;border:0;color:var(--blue);font-weight:600;cursor:
   .ph img{height:46px}.ph h2{margin:0;font-size:16px;color:var(--navy);text-align:right}.ph p{margin:2px 0 0;color:#444;font-size:11.5px;text-align:right}
   .sheet{break-inside:avoid;border-radius:0}
   .ins{break-inside:avoid}
+  /* cash-sale invoice: print only the formal invoice */
+  .scr{display:none!important}
+  .pinv{display:block;color:#111;font-size:12px;line-height:1.4}
+  .pinv .pi-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+  .pinv .pi-top img{height:72px}
+  .pinv .pi-shop{text-align:right;font-size:11px;line-height:1.5}
+  .pinv .pi-shopname{font-size:25px;font-weight:800;line-height:1.1;margin-bottom:6px}
+  .pinv .pi-title{margin:14px 0 12px;border-top:3px solid #5588e7;border-bottom:3px solid #5588e7;text-align:center;color:#5588e7;font-weight:700;font-size:15px;padding:4px 0}
+  .pinv .pi-parties{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:10px;margin-bottom:10px}
+  .pinv .pi-parties b{display:block}.pinv .pi-r{text-align:right}
+  .pinv table{width:100%;border-collapse:collapse}
+  .pinv .pi-items th{background:#5588e7;color:#fff;font-weight:700;padding:5px 6px;text-align:left}
+  .pinv .pi-items td{padding:7px 6px;vertical-align:top}
+  .pinv .pi-items .n{text-align:right;white-space:nowrap}
+  .pinv .pi-items .sm{font-size:10.5px;color:#222;display:block;margin-top:2px}
+  .pinv .pi-items tr.tot td{border-top:1.5px solid #333;border-bottom:1.5px solid #333;font-weight:700}
+  .pinv .pi-cols{display:grid;grid-template-columns:1.12fr 1fr;gap:12px;margin-top:14px;align-items:start}
+  .pinv .pi-bar{background:#5588e7;color:#fff;font-weight:700;padding:5px 6px;margin-top:8px}
+  .pinv .pi-bar:first-child{margin-top:0}
+  .pinv .pi-txt{padding:6px 4px 2px}
+  .pinv .pi-terms p{margin:0 0 3px}
+  .pinv .pi-amt td{padding:5px 4px;border-bottom:1px solid #999}
+  .pinv .pi-amt td:last-child{text-align:right;white-space:nowrap}
+  .pinv .pi-amt tr.b td{font-weight:700;border-bottom:1.5px solid #333}
+  .pinv .pi-sig{display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-top:40px;break-inside:avoid}
+  .pinv .pi-sb{text-align:center}
+  .pinv .pi-space{height:62px}
+  .pinv .pi-line{border-top:1.5px solid #333;padding-top:4px}
+  .pinv .pi-nm{margin-top:2px;font-weight:600;font-size:11px}
+  .pinv .pi-dt{margin-top:6px;font-size:10.5px;color:#444;text-align:left}
+  .pinv .pi-end{margin-top:28px;border-bottom:1px dashed #aaa}
+  .pinv tr,.pinv .pi-cols>div{break-inside:avoid}
 }
+
 </style>
 </head>
 <body>
-<header class="top"><div class="in"><img class="logo" src="logo.png" alt="NCC – The Smart Choice"><div class="ttl">Customer payment<br>summary</div></div></header>
+<header class="top"><div class="in"><img class="logo" src="logo.png" alt="NCC – The Smart Choice">
+  <div class="hd">
+    <div class="ttl" id="ttl"></div>
+    <div class="tools">
+      <span class="ver" id="ver"></span>
+      <div class="lang" role="group" aria-label="Language / භාෂාව">
+        <button type="button" data-lang="en" aria-pressed="true">English</button>
+        <button type="button" data-lang="si" aria-pressed="false" lang="si">සිංහල</button>
+      </div>
+    </div>
+  </div></div></header>
 <section class="bar"><div class="in">
   <form class="search" id="form" autocomplete="off">
-    <input id="mpl" type="text" autocapitalize="characters" autocorrect="off" spellcheck="false" placeholder="MPL No. (e.g. MPLNCC1015)" aria-label="MPL No." enterkeyhint="next" required>
-    <input id="mobile" type="tel" inputmode="tel" placeholder="Mobile number (e.g. 077 123 4567)" aria-label="Mobile number" enterkeyhint="search" required>
+    <input id="mpl" type="text" autocapitalize="characters" autocorrect="off" spellcheck="false" enterkeyhint="next" required>
+    <input id="mobile" type="tel" inputmode="tel" enterkeyhint="search" required>
     <div class="btns">
-      <button id="go" type="submit">Search</button>
-      <button type="button" id="print" disabled>Print</button>
-      <button type="button" id="share" disabled>Share link</button>
+      <button id="go" type="submit"></button>
+      <button type="button" id="print" disabled></button>
+      <button type="button" id="share" disabled></button>
     </div>
   </form>
 </div></section>
-<main id="out" aria-live="polite"><div class="msg"><img src="support.png" alt=""><b>Enter your MPL number and mobile number</b>Your payment summary will appear here.</div></main>
+<main id="out" aria-live="polite"></main>
 <div id="toast" role="status" hidden></div>
 
 <script>
 /* ============ SETTINGS ============
    Sheet must be shared: Anyone with the link - Viewer. Tab names must match exactly.
-   PUBLISHED (optional, most reliable): File > Share > Publish to web > pick the tab > CSV,
-   then paste the link for that tab below. Leave "" to read the tab directly.
-   Warranty is worked out from the invoice date and the product category (see WARRANTY). */
+   ACS_GID is tried first (the tab in your link), then the tab name. */
 const CONFIG = {
-  SHEET_ID: "1r_X2f8Nw8cg-hIOE9KKAVqLXWhjpV8e5yojujYJEbB4",
+  VERSION: "1.0.0",
+  SHEET_ID: "1cDnCh7GDPdpcXUDH7GsY9TSF5hRFDl7G6nRxdW0qIXY",
+  ACS_GID: "876091980",
   TABS: { acs: "MPL-ACS", slr: "MPL-SLR", str: "MPL-STR" },
   PUBLISHED: { acs: "", slr: "", str: "" },
+  /* seller details + fixed texts printed on the cash-sale invoice */
+  SHOP: { name:"A-Z LAPTOPS", address:"'NEGOMBO CITY CENTRE' No: 198, St. Joseph's Street. Negombo.", phone:"071 533 5010", email:"negombocitycentre@gmail.com" },
+  BALANCE_COL: "AL",             /* "Balance Due (Rs.)" on the account summary is read from this sheet column (blank = use Invoice Value - Total Paid) */
+  INVOICE_PREFIX: "NCC",         /* invoice no. = NCC + 4-letter code from OTHER 1 REF (column B, leading "BC" dropped) + last 4 digits of the MPL no. */
+  PAYMENT_MODE: "Cash",
+  TERMS: [
+    "SUPER & STANDARD Laptops: 6-month warranty (3 months comprehensive + 3 months service only).",
+    "VALUE & BUDGET Laptops: 3-month warranty (1 month comprehensive + 2 months service only).",
+    "Battery replacement applies only if backup falls below 1 hour within the first 3 months (not applicable to VALUE & BUDGET Laptops).",
+    "Warranty excludes damage due to misuse, negligence, power fluctuations, natural disasters, or accidents. Repairs outside warranty are chargeable.",
+    "All claims must be submitted to the nearest NCC service centre. Courier charges are borne by the customer."
+  ],
+  TERMS_NOTES: ["WARRANTY IS VOID IF THE STICKER IS REMOVED OR DAMAGED.", "\"No refunds under any circumstances.\""],
+  GIDS: { slr: "", str: "" },   /* optional: tab gid numbers (from the sheet URL) to read raw text instead of guessing types */
   /* months from invoice date: [full (hardware) warranty, service warranty]. null = no warranty */
   WARRANTY: { STANDARD:[3,6], SUPER:[3,6], VALUE:[1,3], BUDGET:null }
 };
-/* Column positions in MPL-ACS (A = 0) */
-const C = { invDate:2, mpl:4, name:5, contact:6, paid:8, invoice:9, balance:10, dpAmt:11, dpDate:12,
-  pay:[[13,14],[15,16],[17,18],[19,20],[21,22],[23,24]], nIns:25,
-  lateStatus:34, insAmt:35, overdue:36, gain:37, totalOver:38, latePaid:39, running:40, capPaid:41, discount:42 };
+/* Default column positions (A = 0). The page first looks the columns up by their header names,
+   so inserting a column does not break it; these defaults are only used when a header is not found.
+   MPL-ACS now: contact = G, extra columns H-I, Total Paid = J ... Late block AJ..AS */
+const DEF_ACS = { invDate:2, mpl:4, name:5, contact:6, paid:9, invoice:10, balance:11, dpAmt:12, dpDate:13,
+  pay:[[14,15],[16,17],[18,19],[20,21],[22,23],[24,25]], nIns:26,
+  lateStatus:35, insAmt:36, overdue:37, lateChg:38, totalOver:39, latePaid:40, discount:41, pendingLate:42, received:43, finalOut:44 };
+const DEF_SLR = { mpl:0, batch:3, serial:5, model:6, spec:7, category:8, accessories:9, name:10, contact:11,
+  service:12, delivery:13, invoiceAmt:14, invDate:16, issued:17, ref1:1, shipTo:20,
+  address:-1, invNo:-1, desc:-1, os:-1 };   /* -1 = optional column, used only if a matching header exists */
+let C = {...DEF_ACS}, S = {...DEF_SLR};
+const colIndex = L => String(L || "").toUpperCase().split("").reduce((n, ch) => n * 26 + ch.charCodeAt(0) - 64, 0) - 1;
+const norm = x => String(x ?? "").replace(/\s+/g, " ").trim().toLowerCase();
+function mapHeaders(rows, anchor, defs, spec, maxRows=12){
+  /* spec: field -> [regex, rowOffset(0 = header row, 1 = row below)] ; returns merged map */
+  let hr = -1;
+  for (let i = 0; i < Math.min(rows.length, maxRows) && hr < 0; i++) if (rows[i].some(c => anchor.test(norm(c)))) hr = i;
+  const m = {...defs}; if (hr < 0) return m;
+  const colOf = (re, off, from=0) => { const row = rows[hr + off] || []; for (let c = from; c < row.length; c++) if (re.test(norm(row[c]))) return c; return -1; };
+  for (const [f, [re, off]] of Object.entries(spec)){ const c = colOf(re, off); if (c > -1) m[f] = c; }
+  return m;
+}
+function mapAcs(rows){
+  /* 1) header names where they came through; 2) otherwise (or if they don't check out) work the layout out from the data itself */
+  const m = mapHeaders(rows, /^mpl\.?\s*no\.?$/, DEF_ACS, {
+    invDate:[/^invoice date$/,0], mpl:[/^mpl\.?\s*no\.?$/,0], name:[/^name$/,0], contact:[/^contact/,0],
+    paid:[/^total paid/,0], lateStatus:[/^status$/,1] });
+  const data = rows.filter(r => /^MPL/i.test(clean(r[m.mpl])));
+  /* Total Paid column = the one followed by Invoice Value and Balance Due, where Balance = Invoice - Paid */
+  const rel = c => { let ok = 0; for (const r of data){ const a = toNum(r[c]), b = toNum(r[c+1]), d = toNum(r[c+2]);
+    if (a != null && b != null && d != null && b > 0 && Math.abs(b - a - d) < 1.5) ok++; } return ok; };
+  if (rel(m.paid) < 3){ let best = -1, bc = m.paid; for (let c = 5; c <= 16; c++){ const k = rel(c); if (k > best){ best = k; bc = c; } } if (best >= 3) m.paid = bc; }
+  m.invoice = m.paid + 1; m.balance = m.paid + 2; m.dpAmt = m.paid + 3; m.dpDate = m.paid + 4; m.nIns = m.paid + 17;
+  m.pay = [0,1,2,3,4,5].map(k => [m.paid + 5 + 2*k, m.paid + 6 + 2*k]);
+  /* Late-charge block starts at the Status column (the one holding "OK" / "CHECK: ..." on most rows) */
+  const okCount = c => data.filter(r => /^ok$/i.test(clean(r[c]))).length;
+  if (okCount(m.lateStatus) < 3){ let best = 0, bc = m.lateStatus; for (let c = m.paid + 18; c <= m.paid + 45; c++){ const k = okCount(c); if (k > best){ best = k; bc = c; } } if (best >= 3) m.lateStatus = bc; }
+  const st = m.lateStatus;
+  m.balanceCol = CONFIG.BALANCE_COL ? colIndex(CONFIG.BALANCE_COL) : -1;
+  Object.assign(m, { insAmt:st+1, overdue:st+2, lateChg:st+3, totalOver:st+4, latePaid:st+5, discount:st+6, pendingLate:st+7, received:st+8, finalOut:st+9 });
+  return m;
+}
+function mapSlr(rows){
+  return mapHeaders(rows, /^mpl\w*\s*ref/, DEF_SLR, {
+    mpl:[/^mpl\w*\s*ref/,0], batch:[/^batch no/,0], serial:[/^serial no/,0], model:[/^model$/,0], spec:[/^specification$/,0],
+    category:[/^category$/,0], accessories:[/^accessories$/,0], name:[/^customer name/,0], contact:[/^cont\w*act/,0],
+    service:[/^service amt/,0], delivery:[/^delivery amt/,0], invoiceAmt:[/^invoice amt/,0], invDate:[/^invoice date$/,0], issued:[/^issued date$/,0],
+    ref1:[/^other 1 ref/,0], shipTo:[/^delivery location/,0], address:[/^(bill(ing)?\s*)?address$/,0],
+    invNo:[/^invoice\s*(no|number)/,0], desc:[/^(invoice\s*)?description$/,0], os:[/^(os|operating system)$/,0] });
+}
+
+/* ============ LANGUAGE ============ */
+const SI_MON = ["ජන","පෙබ","මාර්","අප්‍රේ","මැයි","ජූනි","ජූලි","අගෝ","සැප්","ඔක්","නොවැ","දෙසැ"];
+const I18N = {
+ en:{
+  docTitle:"NCC – Customer Account Summary", title:"CUSTOMER PAYMENT<br>SUMMARY", version:"Version",
+  phMpl:"MPL No. (e.g. MPLNCC1015)", phMob:"Mobile number (e.g. 077 123 4567)", lblMpl:"MPL No.", lblMob:"Mobile number",
+  search:"Search", loading:"Loading…", print:"Print", share:"Share link",
+  startH:"Enter your MPL number and mobile number", startP:"Your payment summary will appear here.",
+  bothH:"Enter both details", bothP:"Type the MPL number and a Sri Lankan mobile number: 9 digits, 10 digits starting with 0, or +94 format.",
+  noneH:"No matching customer found", noneP:"The MPL number and mobile number must both belong to the same account. Check both and try again, or contact NCC customer support.",
+  eAccessH:"Can't read the sheet", eAccessP:"The Google Sheet must be shared as “Anyone with the link – Viewer”, and the tab names in CONFIG must match exactly.",
+  eShapeH:"Sheet layout not recognised", eShapeP:"The MPL-ACS tab does not look as expected. Check CONFIG.TABS.acs and that column E holds the MPL numbers.",
+  eNetH:"Couldn't reach Google Sheets", eNetP:"Check your internet connection and try again.",
+  eOtherH:"Something went wrong", eOtherP:"Please try again.",
+  asof:d=>`Late Payment calculated up to ${d}`,
+  acctTitle:"CUSTOMER ACCOUNT SUMMARY", instTitle:"MONTHLY INSTALMENT SUMMARY", lateTitle:"OVERDUE & LATE CHARGES SUMMARY",
+  mplNo:"MPL No.", name:"Name", invoiceVal:"Invoice Value (Rs.)", invDate:"Invoice Date", totalPaid:"Total Paid (Rs.)", balDue:"Balance Due (Rs.)", excess:"excess paid",
+  dpAmt:"Down Payment (Rs.)", dpDate:"Down Payment Date", nIns:"No. of Instalments", insAmt:"Instalment Amt. (Rs.)",
+  prod:"Product Type & Category", wFull:"Full Warranty Until", wSvc:"Service Warranty Until", expired:"expired", noWarranty:"No warranty", laptop:"Laptop",
+  due:"Due (Rs.)", paidH:"Paid (Rs.)", balH:"Balance (Rs.)", instN:n=>`Instalment ${n}`, noIns:"No instalments recorded for this account.",
+  paidLate:d=>`Paid ${d} day${d>1?"s":""} late`, onTime:"Paid on time", paidTag:"Paid",
+  overdueTag:d=>`${d} day${d>1?"s":""} overdue`, dueIn:d=>`Due in ${d} day${d>1?"s":""}`,
+  lOverdue:"Payments Overdue (Rs.)", lCharges:"Late Charges (Rs.)", lTotal:"Total Over Due (Rs.)", lPaid:"Late Charges Paid (Rs.)",
+  lDisc:"Late Charges Discount (Rs.)", lPending:"Pending Late Charges (Rs.)", lRecv:"Total Payments Received (Rs.)", lFinal:"Final Outstanding (Rs.)",
+  lateNA:"Overdue and late charge details are not available for this account yet. Please contact us for a full statement.",
+  allocNote:x=>`Payments are applied first to late charges (Rs. ${x} paid so far), then to earlier unpaid instalments, and only then to the current instalment.`,
+  invTitle:"DIGITAL INVOICE", itemTitle:"ITEM DETAILS", amtTitle:"INVOICE AMOUNT", wTitle:"WARRANTY DETAILS",
+  cpu:"Processor", gen:"Generation", ram:"RAM", storage:"Storage", screen:"Display Size",
+  cpuV:n=>`Intel Core i${n}`, genV:n=>{const o=n%100,x=(o>=11&&o<=13)?"th":({1:"st",2:"nd",3:"rd"}[n%10]||"th");return `${n}${x} Generation`;}, gb:n=>`${n} GB`, tb:n=>`${n} TB`, inch:n=>`${n} inch`,
+  saleType:"Sale Type", cashSale:"Cash Sale", model:"Model", spec:"Specification", serial:"Serial No.", accessories:"Accessories",
+  svcAmt:"Service Amt. (Rs.)", delAmt:"Delivery Amt. (Rs.)", invAmt:"Invoice Amount (Rs.)", totAmt:"Total (Rs.)", wStart:"Warranty Starts (Invoice Date)",
+  printed:"Printed", refresh:"Refresh from sheet", clear:"New search", copied:"Link copied", copyPrompt:"Copy this link", rs:"Rs."
+ },
+ si:{
+  docTitle:"NCC – පාරිභෝගික ගිණුම් සාරාංශය", title:"පාරිභෝගික ගෙවීම්<br>සාරාංශය", version:"අනුවාදය",
+  phMpl:"MPL අංකය (උදා: MPLNCC1015)", phMob:"ජංගම දුරකථන අංකය (උදා: 077 123 4567)", lblMpl:"MPL අංකය", lblMob:"ජංගම දුරකථන අංකය",
+  search:"සොයන්න", loading:"පූරණය වෙමින්…", print:"මුද්‍රණය", share:"සබැඳිය බෙදාගන්න",
+  startH:"ඔබේ MPL අංකය සහ ජංගම දුරකථන අංකය ඇතුළත් කරන්න", startP:"ඔබේ ගෙවීම් සාරාංශය මෙහි දිස්වේ.",
+  bothH:"විස්තර දෙකම ඇතුළත් කරන්න", bothP:"MPL අංකය සහ ශ්‍රී ලංකා ජංගම දුරකථන අංකයක් ඇතුළත් කරන්න: ඉලක්කම් 9ක්, 0 න් ආරම්භ වන ඉලක්කම් 10ක්, හෝ +94 ආකෘතියෙන්.",
+  noneH:"ගැළපෙන පාරිභෝගිකයෙකු හමු නොවීය", noneP:"MPL අංකය සහ ජංගම දුරකථන අංකය යන දෙකම එකම ගිණුමකට අයත් විය යුතුය. දෙකම පරීක්ෂා කර නැවත උත්සාහ කරන්න, නැතහොත් NCC පාරිභෝගික සේවාව අමතන්න.",
+  eAccessH:"පත්‍රිකාව කියවිය නොහැක", eAccessP:"Google Sheet එක “සබැඳිය ඇති ඕනෑම අයෙකුට – නැරඹීමට” ලෙස බෙදාගත යුතු අතර, CONFIG හි ටැබ් නම් නිවැරදිව ගැළපිය යුතුය.",
+  eShapeH:"පත්‍රිකා ව්‍යුහය හඳුනාගත නොහැක", eShapeP:"MPL-ACS ටැබය අපේක්ෂිත පරිදි නොවේ. CONFIG.TABS.acs පරීක්ෂා කර E තීරුවේ MPL අංක ඇති බව තහවුරු කරන්න.",
+  eNetH:"Google Sheets වෙත සම්බන්ධ විය නොහැකි විය", eNetP:"ඔබේ අන්තර්ජාල සම්බන්ධතාවය පරීක්ෂා කර නැවත උත්සාහ කරන්න.",
+  eOtherH:"යම් දෝෂයක් සිදු විය", eOtherP:"කරුණාකර නැවත උත්සාහ කරන්න.",
+  asof:d=>`ප්‍රමාද ගෙවීම් ගණනය කර ඇත්තේ ${d} දක්වාය`,
+  acctTitle:"පාරිභෝගික ගිණුම් සාරාංශය", instTitle:"මාසික වාරික සාරාංශය", lateTitle:"කල් පසු වූ ගෙවීම් සහ ප්‍රමාද ගාස්තු සාරාංශය",
+  mplNo:"MPL අංකය", name:"නම", invoiceVal:"ඉන්වොයිස් වටිනාකම (රු.)", invDate:"ඉන්වොයිස් දිනය", totalPaid:"මුළු ගෙවූ මුදල (රු.)", balDue:"ගෙවිය යුතු ශේෂය (රු.)", excess:"අතිරේකව ගෙවා ඇත",
+  dpAmt:"මූලික ගෙවීම (රු.)", dpDate:"මූලික ගෙවීමේ දිනය", nIns:"වාරික ගණන", insAmt:"වාරික මුදල (රු.)",
+  prod:"නිෂ්පාදන වර්ගය සහ ප්‍රවර්ගය", wFull:"සම්පූර්ණ වගකීම අවසන් වන දිනය", wSvc:"සේවා වගකීම අවසන් වන දිනය", expired:"කල් ඉකුත් වී ඇත", noWarranty:"වගකීමක් නැත", laptop:"ලැප්ටොප්",
+  due:"ගෙවිය යුතු (රු.)", paidH:"ගෙවූ (රු.)", balH:"ශේෂය (රු.)", instN:n=>`වාරිකය ${n}`, noIns:"මෙම ගිණුම සඳහා වාරික වාර්තා කර නැත.",
+  paidLate:d=>`දින ${d} කින් ප්‍රමාදව ගෙවා ඇත`, onTime:"නියමිත දිනට ගෙවා ඇත", paidTag:"ගෙවා ඇත",
+  overdueTag:d=>`දින ${d} ක් කල් පසුවී ඇත`, dueIn:d=>`දින ${d} කින් ගෙවිය යුතුය`,
+  lOverdue:"කල් පසු වූ ගෙවීම් (රු.)", lCharges:"ප්‍රමාද ගාස්තු (රු.)", lTotal:"මුළු කල් පසු මුදල (රු.)", lPaid:"ගෙවූ ප්‍රමාද ගාස්තු (රු.)",
+  lDisc:"ප්‍රමාද ගාස්තු වට්ටම (රු.)", lPending:"ගෙවිය යුතු ප්‍රමාද ගාස්තු (රු.)", lRecv:"ලැබුණු මුළු ගෙවීම් (රු.)", lFinal:"අවසාන හිඟ මුදල (රු.)",
+  lateNA:"මෙම ගිණුම සඳහා කල් පසු වූ ගෙවීම් සහ ප්‍රමාද ගාස්තු විස්තර තවම නොමැත. සම්පූර්ණ ප්‍රකාශයක් සඳහා කරුණාකර අප අමතන්න.",
+  allocNote:x=>`ගෙවීම් මුලින්ම ප්‍රමාද ගාස්තු සඳහා (මෙතෙක් රු. ${x} ගෙවා ඇත) ද, ඉන්පසු පෙර හිඟ වාරික සඳහා ද, අවසානයේ පමණක් වත්මන් වාරිකය සඳහා ද යොදනු ලැබේ.`,
+  invTitle:"ඩිජිටල් ඉන්වොයිසිය", itemTitle:"භාණ්ඩ විස්තර", amtTitle:"ඉන්වොයිස් මුදල", wTitle:"වගකීම් විස්තර",
+  cpu:"ප්‍රොසෙසරය", gen:"පරම්පරාව", ram:"RAM මතකය", storage:"ගබඩා ධාරිතාව", screen:"තිරයේ ප්‍රමාණය",
+  cpuV:n=>`Intel Core i${n}`, genV:n=>`${n} වන පරම්පරාව`, gb:n=>`${n} GB`, tb:n=>`${n} TB`, inch:n=>`අඟල් ${n}`,
+  saleType:"විකුණුම් වර්ගය", cashSale:"මුදල් විකුණුම", model:"මාදිලිය", spec:"පිරිවිතර", serial:"අනුක්‍රමික අංකය", accessories:"උපාංග",
+  svcAmt:"සේවා ගාස්තුව (රු.)", delAmt:"බෙදාහැරීමේ ගාස්තුව (රු.)", invAmt:"ඉන්වොයිස් මුදල (රු.)", totAmt:"මුළු මුදල (රු.)", wStart:"වගකීම ආරම්භය (ඉන්වොයිස් දිනය)",
+  printed:"මුද්‍රණය කළ දිනය", refresh:"පත්‍රිකාවෙන් යළි පූරණය කරන්න", clear:"නව සෙවුමක්", copied:"සබැඳිය පිටපත් කරන ලදී", copyPrompt:"මෙම සබැඳිය පිටපත් කරන්න", rs:"රු."
+ }
+};
+let LANG = "en";
+try { const s = localStorage.getItem("ncc_lang"); if (s === "si" || s === "en") LANG = s; else if (/^si/i.test(navigator.language || "")) LANG = "si"; } catch(e){}
+const t = (k, ...a) => { const v = I18N[LANG][k] ?? I18N.en[k]; return typeof v === "function" ? v(...a) : v; };
 
 const $ = id => document.getElementById(id);
 const out = $("out"), mplIn = $("mpl"), mobIn = $("mobile"), btn = $("go"), prn = $("print"), shr = $("share");
@@ -128,7 +307,7 @@ const key = s => clean(s).replace(/\s+/g, "").toUpperCase();
 const toNum = s => { s = clean(s); if (!s) return null; const neg = /^\(.*\)$/.test(s) || /^[-−]/.test(s);
   const n = parseFloat(s.replace(/[^0-9.]/g, "")); return isNaN(n) ? null : (neg ? -n : n); };
 const fmt = n => n.toLocaleString("en-US", {minimumFractionDigits:2, maximumFractionDigits:2});
-const money = n => n == null ? "—" : (n < 0 ? "− " : "") + "Rs. " + fmt(Math.abs(n));
+const money = n => n == null ? "—" : (n < 0 ? "− " : "") + t("rs") + " " + fmt(Math.abs(n));
 const plain = n => n == null ? "—" : (n < 0 ? "−" : "") + fmt(Math.abs(n));
 const titleCase = s => s.toLowerCase().replace(/(^|\s)\S/g, c => c.toUpperCase());
 
@@ -148,7 +327,9 @@ function parseDate(s, mdy){
   }
   return null;
 }
-const fmtDate = d => d.toLocaleDateString("en-GB", {day:"2-digit", month:"short", year:"numeric"});
+const fmtDate = d => LANG === "si"
+  ? `${String(d.getDate()).padStart(2,"0")} ${SI_MON[d.getMonth()]} ${d.getFullYear()}`
+  : d.toLocaleDateString("en-GB", {day:"2-digit", month:"short", year:"numeric"});
 const showDate = s => { const d = parseDate(s); return d ? fmtDate(d) : clean(s); };
 const daysBetween = (a, b) => Math.round((b - a) / 86400000);
 const addMonths = (d, n) => { const x = new Date(d.getFullYear(), d.getMonth() + n, 1);
@@ -168,35 +349,58 @@ function parseCSV(text){
   if (f !== "" || row.length){ row.push(f); rows.push(row); }
   return rows;
 }
-async function getCsv(k){
-  const url = CONFIG.PUBLISHED[k] || "https://docs.google.com/spreadsheets/d/" + encodeURIComponent(CONFIG.SHEET_ID) +
-    "/gviz/tq?tqx=out:csv&headers=0&sheet=" + encodeURIComponent(CONFIG.TABS[k]);
-  const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), 25000);
+const base = () => "https://docs.google.com/spreadsheets/d/" + encodeURIComponent(CONFIG.SHEET_ID) + "/gviz/tq?tqx=out:csv&headers=0";
+async function fetchCsv(url){
+  const ctl = new AbortController(), tm = setTimeout(() => ctl.abort(), 25000);
   let res; try { res = await fetch(url, {cache:"no-store", signal:ctl.signal}); }
-  catch(e){ throw new Error("network"); } finally { clearTimeout(t); }
+  catch(e){ throw new Error("network"); } finally { clearTimeout(tm); }
   const text = await res.text();
   if (!res.ok || /^\s*</.test(text)) throw new Error("access");
   return parseCSV(text);
 }
+const hasMpl = rows => rows.some(r => /^MPL/i.test(clean(r[C.mpl])));
+async function getAcs(){
+  if (CONFIG.PUBLISHED.acs) return fetchCsv(CONFIG.PUBLISHED.acs);
+  const urls = [];
+  if (CONFIG.ACS_GID){   /* export = raw cell text; gviz can blank text cells in a mostly-numeric column */
+    urls.push("https://docs.google.com/spreadsheets/d/" + encodeURIComponent(CONFIG.SHEET_ID) + "/export?format=csv&gid=" + encodeURIComponent(CONFIG.ACS_GID));
+    urls.push(base() + "&gid=" + encodeURIComponent(CONFIG.ACS_GID));
+  }
+  urls.push(base() + "&sheet=" + encodeURIComponent(CONFIG.TABS.acs));
+  let err = new Error("shape");
+  for (const u of urls){
+    try { const rows = await fetchCsv(u); if (hasMpl(rows)) return rows; err = new Error("shape"); }
+    catch(e){ err = e; }
+  }
+  throw err;
+}
+async function getCsv(k){
+  if (CONFIG.PUBLISHED[k]) return fetchCsv(CONFIG.PUBLISHED[k]);
+  const g = CONFIG.GIDS[k];
+  if (g){ try { const rows = await fetchCsv("https://docs.google.com/spreadsheets/d/" + encodeURIComponent(CONFIG.SHEET_ID) + "/export?format=csv&gid=" + encodeURIComponent(g)); if (rows.length) return rows; } catch(e){} }
+  return fetchCsv(base() + "&sheet=" + encodeURIComponent(CONFIG.TABS[k]));
+}
 
-let ROWS = null, ASOF = "", INFO = {}, CAT = {};
+let ROWS = null, SLR = null, EXTRA_ERR = null, ASOF = "", INFO = {}, CAT = {};
 async function load(force){
   if (ROWS && !force) return;
-  const acs = await getCsv("acs");
-  if (!acs.some(r => /^MPL/i.test(clean(r[C.mpl])))) throw new Error("shape");
-  ROWS = acs; ASOF = "";
-  for (const r of acs){ const i = r.findIndex(c => /interest calculated up to/i.test(c));
+  const extra = Promise.all([getCsv("slr"), getCsv("str")]);   /* fetched alongside the account tab */
+  extra.catch(() => {});
+  const acs = await getAcs();
+  C = mapAcs(acs); ROWS = acs; ASOF = "";
+  for (const r of acs){ const i = r.findIndex(c => /(late payment|interest) calculated up to/i.test(c));
     if (i > -1 && clean(r[i+1])){ ASOF = clean(r[i+1]); break; } }
-  INFO = {}; CAT = {};
-  try {   /* product category is optional: never block the summary */
-    const [slr, str] = await Promise.all([getCsv("slr"), getCsv("str")]);
+  INFO = {}; CAT = {}; SLR = null; EXTRA_ERR = null;
+  try {   /* sales + stock tabs: needed for warranty category and for cash-sale invoices */
+    const [slr, str] = await extra;
+    S = mapSlr(slr); SLR = slr;
     for (const r of str){   /* STR ref (A) + number (B), e.g. WLC + 1004 = WLC1004 */
       const num = parseInt(clean(r[1]).replace(/,/g, ""), 10);
       if (clean(r[0]) && !isNaN(num) && clean(r[6])) CAT[key(r[0]) + num] = clean(r[6]).toUpperCase();
       if (clean(r[3]) && clean(r[6])) CAT[key(r[3])] = CAT[key(r[3])] || clean(r[6]).toUpperCase();   /* fallback: serial no. */
     }
-    for (const r of slr) if (/^MPL/i.test(clean(r[0]))) INFO[key(r[0])] = {batch:key(r[3]), serial:key(r[5])};   /* SLR batch no. (D), serial (F) */
-  } catch(e){}
+    for (const r of slr) if (/^MPL/i.test(clean(r[S.mpl]))) INFO[key(r[S.mpl])] = {batch:key(r[S.batch]), serial:key(r[S.serial]), inv:clean(r[S.invDate]) || clean(r[S.issued])};
+  } catch(e){ EXTRA_ERR = e; }
 }
 
 /* ---------- mobile numbers ---------- */
@@ -208,52 +412,219 @@ function normalizeMobile(v){
   return n.length === 9 ? n : "";
 }
 function mobileNumbers(v){
-  const text = String(v ?? "");
-  const parts = text.match(/\+?94[\s().-]*\d[\d\s().-]{7,}\d|0\d[\d\s().-]{7,}\d|\b\d{2}[\s.-]?\d{3}[\s.-]?\d{4}\b|\b\d{9}\b/g) || [];
-  const set = new Set(parts.map(normalizeMobile).filter(Boolean));
+  /* one contact cell may hold several numbers: "0771832409 / 0771756570", "077 123 4567, 071..." etc. */
+  const text = String(v ?? ""), set = new Set();
+  const add = n => { n = normalizeMobile(n); if (n) set.add(n); };
+  const scan = d => {   /* walk a run of digits, cutting valid numbers off the front */
+    while (d.length >= 9){
+      const len = (d.startsWith("94") && d.length >= 11) ? 11 : (d[0] === "0" && d.length >= 10) ? 10 : 9;
+      add(d.slice(0, len)); d = d.slice(len);
+    }
+  };
+  text.split(/[\/,;|&\n\r]+|\s+(?:and|or)\s+|\s+[-–—]\s+|\s{2,}/i).forEach(p => { add(p); scan(digits(p)); });
   const whole = normalizeMobile(text.replace(/,/g, "")); if (whole && !/[A-Za-z]/.test(text)) set.add(whole);
   return [...set];
 }
+const acsContact = r => r.slice(C.contact, Math.max(C.contact + 1, C.paid)).join(" / ");   /* contact + any extra columns before Total Paid */
+const slrContact = r => clean(r[S.contact]) + " / " + clean(r[S.name]);
 const find = (mpl, mob) => { const a = key(mpl), b = normalizeMobile(mob);
-  return (a && b && ROWS.find(r => key(r[C.mpl]) === a && mobileNumbers(r[C.contact]).includes(b))) || null; };
+  return (a && b && ROWS.find(r => key(r[C.mpl]) === a && mobileNumbers(acsContact(r)).includes(b))) || null; };
+const inAcs = mpl => { const a = key(mpl); return !!a && ROWS.some(r => key(r[C.mpl]) === a); };
+const findSlr = (mpl, mob) => { const a = key(mpl), b = normalizeMobile(mob);
+  return (a && b && SLR && SLR.find(r => key(r[S.mpl]) === a && mobileNumbers(slrContact(r)).includes(b))) || null; };
 
 /* ---------- render ---------- */
 const kv = (k, v, cls="", row="") => `<div class="kv ${row}"><div class="k">${k}</div><div class="v num ${cls}">${v}</div></div>`;
 
 function productText(r){
   const i = INFO[key(r[C.mpl])]; if (!i) return "—";
-  const c = CAT[i.batch] || CAT[i.serial]; return c ? "Laptop / " + esc(titleCase(c)) : "Laptop";
+  const c = CAT[i.batch] || CAT[i.serial]; return c ? t("laptop") + " / " + esc(titleCase(c)) : t("laptop");
 }
-function warranty(r, idx){
-  const i = INFO[key(r[C.mpl])], c = i && (CAT[i.batch] || CAT[i.serial]);
+const invDateOf = r => parseDate(r[C.invDate]) || parseDate((INFO[key(r[C.mpl])] || {}).inv);
+function warrantyFor(mplKey, d, idx){   /* warranty always counts from the invoice date */
+  const i = INFO[mplKey], c = i && (CAT[i.batch] || CAT[i.serial]);
   if (!c || !(c in CONFIG.WARRANTY)) return "—";
-  const m = CONFIG.WARRANTY[c]; if (!m) return "No warranty";
-  const d = parseDate(r[C.invDate]); if (!d) return "—";
-  const end = addMonths(d, m[idx]), t = new Date(); t.setHours(0,0,0,0);
-  return fmtDate(end) + (end < t ? ' <span class="sub">expired</span>' : "");
+  const m = CONFIG.WARRANTY[c]; if (!m) return t("noWarranty");
+  if (!d) return "—";
+  const end = addMonths(d, m[idx]), tdy = new Date(); tdy.setHours(0,0,0,0);
+  return fmtDate(end) + (end < tdy ? ` <span class="sub">${t("expired")}</span>` : "");
+}
+const warranty = (r, idx) => warrantyFor(key(r[C.mpl]), invDateOf(r), idx);
+
+/* storage: a size NOT ending in 0 is an SSD (128, 256, 512); ending in 0 is an HDD (320, 500) */
+function stoParts(n){
+  const big = n <= 4 || n >= 1000, type = Math.round(n) % 10 === 0 ? "HDD" : "SSD";
+  return big ? {val: n >= 1000 ? +(n / 1000).toFixed(2) : n, unit:"TB", type} : {val:n, unit:"GB", type};
+}
+/* the number in the spec is the nominal screen size; these are the real panel sizes */
+const SCREEN = {11:11.6, 12:12.5, 13:13.3, 14:14.1, 15:15.6};
+const realScreen = n => SCREEN[n] || n;
+
+/* "I7.8TH/8/256/14" = Core i7 . 8th gen / 8 GB RAM / 256 GB storage / 14" screen */
+function specRows(spec){
+  const p = clean(spec).toUpperCase().replace(/\s+/g, "").split("/");
+  const [c, gen] = (p[0] || "").split(".");
+  const cm = /^I([3579])$/.exec(c || ""), gm = /^(\d{1,2})(?:ST|ND|RD|TH)?$/.exec(gen || "");
+  const num = x => { const n = parseFloat(String(x || "").replace(/[^0-9.]/g, "")); return isNaN(n) ? null : n; };
+  const ram = num(p[1]), sto = num(p[2]), scr = num(p[3]);
+  if (!cm || ram == null || sto == null) return null;   /* unknown pattern: caller shows the raw text */
+  const size = n => { const q = stoParts(n); return t(q.unit === "TB" ? "tb" : "gb", q.val) + " " + q.type; };
+  return kv(t("cpu"), esc(t("cpuV", cm[1]))) + (gm ? kv(t("gen"), esc(t("genV", +gm[1]))) : "") +
+    kv(t("ram"), esc(t("gb", ram))) + (sto ? kv(t("storage"), esc(size(sto))) : "") + (scr ? kv(t("screen"), esc(t("inch", realScreen(scr)))) : "");
 }
 
+/* ---- printed cash-sale invoice (always English, formal layout) ---- */
+function numWords(n){
+  const ones = ["","One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten","Eleven","Twelve","Thirteen","Fourteen","Fifteen","Sixteen","Seventeen","Eighteen","Nineteen"];
+  const tens = ["","","Twenty","Thirty","Forty","Fifty","Sixty","Seventy","Eighty","Ninety"];
+  const below1000 = x => { let w = []; if (x >= 100){ w.push(ones[Math.floor(x/100)], "Hundred"); x %= 100; }
+    if (x >= 20){ w.push(tens[Math.floor(x/10)]); x %= 10; } if (x) w.push(ones[x]); return w.join(" "); };
+  let r = Math.floor(n), out = [];
+  if (r === 0) return "Zero";
+  for (const [v, name] of [[1e9,"Billion"],[1e6,"Million"],[1e3,"Thousand"]]) if (r >= v){ out.push(below1000(Math.floor(r / v)), name); r %= v; }
+  if (r) out.push(below1000(r));
+  return out.join(" ");
+}
+const ordEn = n => { const o = n % 100; return n + ((o >= 11 && o <= 13) ? "TH" : ({1:"ST",2:"ND",3:"RD"}[n % 10] || "TH")); };
+function specEn(spec){   /* "I7.3RD/8/256/15.6" -> ["Intel Core i7","3RD Gen","8 GB RAM","256 GB","15.6\" Display"] */
+  const p = clean(spec).toUpperCase().replace(/\s+/g, "").split("/");
+  const [c, gen] = (p[0] || "").split("."), cm = /^I([3579])$/.exec(c || ""), gm = /^(\d{1,2})(?:ST|ND|RD|TH)?$/.exec(gen || "");
+  const num = x => { const n = parseFloat(String(x || "").replace(/[^0-9.]/g, "")); return isNaN(n) ? null : n; };
+  const ram = num(p[1]), sto = num(p[2]), scr = num(p[3]);
+  if (!cm || ram == null || sto == null) return clean(spec) ? [clean(spec)] : [];
+  const q = sto ? stoParts(sto) : null;
+  return ["Intel Core i" + cm[1], gm ? ordEn(+gm[1]) + " Gen" : "", ram + " GB RAM", q ? q.val + " " + q.unit + " " + q.type : "", scr ? realScreen(scr) + '" Display' : ""].filter(Boolean);
+}
+/* accessories list without duplicates and without RAM / storage entries (those already come from the specification) */
+function accList(raw, spec){
+  const nk = x => String(x).toUpperCase().replace(/[^A-Z0-9.]/g, "");
+  const seen = new Set(specEn(spec).map(nk)), out = [];
+  for (let a of clean(raw).split(/[,;\/\n|]+/)){
+    a = a.replace(/^\s*NCC[A-Z]*\d+\s*/i, "").trim();
+    if (!a || /\d\s*(GB|TB)\b/i.test(a) && /(RAM|SSD|HDD|DDR|STORAGE|MEMORY)/i.test(a)) continue;
+    if (seen.has(nk(a))) continue;
+    seen.add(nk(a)); out.push(a);
+  }
+  return out;
+}
+function printInvoice(r, o){
+  const g = i => clean(r[i]), shop = CONFIG.SHOP;
+  const rs = n => n == null ? "—" : "Rs " + fmt(n);
+  const dmy = d => d ? String(d.getDate()).padStart(2,"0") + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + d.getFullYear() : "—";
+  const mobile = normalizeMobile((LAST && LAST.mob) || "");
+  /* invoice no. = NCC + OTHER 1 REF (column B) + last 4 digits of the MPL no. */
+  const code = g(S.ref1).toUpperCase().replace(/[^A-Z]/g, "").replace(/^BC/, "").slice(0, 4);
+  const invNo = CONFIG.INVOICE_PREFIX + code + g(S.mpl).replace(/\D/g, "").slice(-4);
+  const today = new Date();
+  const acc = accList(g(S.accessories), g(S.spec));
+  const parts = [...new Set([...specEn(g(S.spec)), g(S.os), ...acc].filter(Boolean))];
+  const ncc = [g(S.batch), g(S.serial)].filter(Boolean).join(" | ");
+  const amt = o.inv, del = o.del || 0, grand = amt == null ? null : amt + del;
+  const words = grand == null ? "" : numWords(grand) + " Rupees" + (Math.round((grand % 1) * 100) ? " and " + numWords(Math.round((grand % 1) * 100)) + " Cents" : "") + " only";
+  return `<section class="pinv" aria-hidden="true">
+    <div class="pi-top"><img src="logo.png" alt="NCC">
+      <div class="pi-shop"><div class="pi-shopname">${esc(shop.name)}</div><div>${esc(shop.address)}</div><div>Phone no.: ${esc(shop.phone)} Email: ${esc(shop.email)}</div></div></div>
+    <div class="pi-title">Invoice</div>
+    <div class="pi-parties">
+      <div><b>Bill To</b><b style="margin-top:8px">${esc(o.name) || "—"}</b>${g(S.address) ? `<div>${esc(g(S.address))}</div>` : ""}${mobile ? `<div style="margin-top:6px">Contact No. : 0${mobile}</div>` : ""}</div>
+      <div><b>Ship To</b>${g(S.shipTo) ? `<div style="margin-top:8px">${esc(g(S.shipTo))}</div>` : ""}</div>
+      <div class="pi-r"><b>Invoice Details</b><div style="margin-top:8px">Invoice No. : ${esc(invNo)}</div><div>Date : <span class="pi-date">${dmy(today)}</span></div></div>
+    </div>
+    <table class="pi-items"><thead><tr><th style="width:4%">#</th><th>Item name</th><th>MPL No,</th><th>Category</th><th class="n">Quantity</th><th class="n">Price/ Unit</th><th class="n">Amount</th></tr></thead>
+      <tbody><tr><td>1</td><td><b>${esc(g(S.model)) || "Laptop"}</b><span class="sm">( ${esc(parts.join(" | "))} )</span><span class="sm">NCC Ref. | Serial No.: ${esc(ncc)}</span></td>
+        <td>${esc(g(S.mpl))}</td><td>${esc(o.cat || "")}</td><td class="n">1</td><td class="n">${rs(amt)}</td><td class="n">${rs(amt)}</td></tr>
+      <tr class="tot"><td></td><td>Total</td><td></td><td></td><td class="n">1</td><td></td><td class="n">${rs(amt)}</td></tr></tbody></table>
+    <div class="pi-cols">
+      <div>
+        <div class="pi-bar">Invoice Amount In Words</div><div class="pi-txt">${esc(words)}</div>
+        <div class="pi-bar">Payment mode</div><div class="pi-txt">${esc(CONFIG.PAYMENT_MODE)}</div>
+        ${g(S.desc) ? `<div class="pi-bar">Description</div><div class="pi-txt">${esc(g(S.desc))}</div>` : ""}
+        <div class="pi-bar">Terms and Conditions</div>
+        <div class="pi-txt pi-terms">${CONFIG.TERMS.map(x => `<p>&gt;&gt; ${esc(x)}</p>`).join("")}<p style="margin-top:12px">${esc(CONFIG.TERMS_NOTES[0] || "")}</p><p style="margin-top:12px">${esc(CONFIG.TERMS_NOTES[1] || "")}</p></div>
+      </div>
+      <div>
+        <div class="pi-bar">Amounts</div>
+        <table class="pi-amt"><tr><td>Sub Total</td><td>${rs(amt)}</td></tr>${del > 0 ? `<tr><td>Delivery Charge</td><td>${rs(del)}</td></tr>` : ""}<tr class="b"><td>Total</td><td>${rs(grand)}</td></tr>
+          <tr><td>Received</td><td>${rs(grand)}</td></tr><tr><td>Balance</td><td>${rs(0)}</td></tr></table>
+      </div>
+    </div>
+    <div class="pi-sig">
+      <div class="pi-sb"><div class="pi-space"></div><div class="pi-line">Customer Signature</div><div class="pi-nm">${esc(o.name)}</div><div class="pi-dt">Date: ......................</div></div>
+      <div class="pi-sb"><div class="pi-space"></div><div class="pi-line"><b>NCC Authorized Officer</b></div><div class="pi-nm">${esc(shop.name)}</div><div class="pi-dt">Date: ......................</div></div>
+    </div>
+    <div class="pi-end"></div>
+  </section>`;
+}
+
+/* digital invoice for cash-sale customers (found in MPL-SLR only) */
+function renderInvoice(r){
+  const g = i => clean(r[i]);
+  const k = key(g(S.mpl)), d = parseDate(g(S.invDate)) || parseDate(g(S.issued));
+  let name = g(S.name) || g(S.contact).replace(/\(?[\d\s+().\/-]{9,}\)?/g, " ").replace(/\s+/g, " ").trim();
+  const inv = toNum(g(S.invoiceAmt)), svc = toNum(g(S.service)), del = toNum(g(S.delivery));
+  const opt = (label, v) => v ? kv(label, esc(v)) : "";
+  const info = INFO[k], cat = info && (CAT[info.batch] || CAT[info.serial]);
+  const head = `<div class="sheet">
+    ${kv(t("mplNo"), esc(g(S.mpl)))}
+    ${kv(t("name"), esc(name) || "—", "", "name")}
+    <div class="sec">${t("invTitle")}</div>
+    ${kv(t("invDate"), d ? esc(fmtDate(d)) : "—")}
+    ${kv(t("saleType"), t("cashSale"))}
+  </div>`;
+  const items = `<div class="sheet"><div class="sec">${t("itemTitle")}</div>
+    ${kv(t("prod"), t("laptop") + (cat ? " / " + esc(titleCase(cat)) : ""))}
+    ${opt(t("model"), g(S.model))}${specRows(g(S.spec)) || opt(t("spec"), g(S.spec))}${opt(t("serial"), g(S.serial))}${opt(t("accessories"), accList(g(S.accessories), g(S.spec)).join(", "))}
+  </div>`;
+  const amt = `<div class="sheet"><div class="sec">${t("amtTitle")}</div>
+    ${kv(t("invAmt"), money(inv))}
+    ${del > 0 ? kv(t("delAmt"), money(del)) : ""}
+    ${kv(t("totAmt"), money(inv == null ? null : inv + (del > 0 ? del : 0)), "", "strong okrow")}
+  </div>`;
+  const war = `<div class="sheet"><div class="sec">${t("wTitle")}</div>
+    ${kv(t("wStart"), d ? esc(fmtDate(d)) : "—")}
+    ${kv(t("wFull"), warrantyFor(k, d, 0))}
+    ${kv(t("wSvc"), warrantyFor(k, d, 1))}
+  </div>`;
+  out.innerHTML = `    <div class="scr">${head}${items}${amt}${war}</div>
+    ${printInvoice(r, {name, d, inv, del: del > 0 ? del : 0, cat: cat ? cat.toUpperCase() : ""})}
+    <footer><button type="button" id="refresh">${t("refresh")}</button><button type="button" id="clear">${t("clear")}</button></footer>`;
+  prn.disabled = shr.disabled = false;
+  $("refresh").onclick = () => search(mplIn.value, mobIn.value, true);
+  $("clear").onclick = () => { history.replaceState(null, "", location.href.split("#")[0]); LAST = null; show(vStart); mplIn.value = mobIn.value = ""; mplIn.focus(); };
+}
+
+/* Payment allocation: each payment first clears late charges, then the oldest unpaid instalment, then the next ones */
+function allocate(pays, latePaid, dues){
+  let lateLeft = latePaid || 0; const pool = [];
+  for (const p of pays){ const l = Math.min(p.amt, lateLeft); lateLeft -= l; const cap = p.amt - l; if (cap > 0.004) pool.push({amt:cap, date:p.date, txt:p.txt}); }
+  return dues.map(due => { let need = due, applied = 0, last = null;
+    while (need > 0.004 && pool.length){ const c = pool[0], take = Math.min(c.amt, need); applied += take; need -= take; c.amt -= take; last = c; if (c.amt <= 0.004) pool.shift(); }
+    return {applied, last, settled: need < 0.5}; });
+}
 function render(r){
   const g = i => clean(r[i]);
-  const invoice = toNum(g(C.invoice)), paid = toNum(g(C.paid)), bal = toNum(g(C.balance));
+  const invoice = toNum(g(C.invoice)), paid = toNum(g(C.paid));
+  const balCol = C.balanceCol >= 0 ? toNum(g(C.balanceCol)) : null;
+  const bal = balCol != null ? balCol : toNum(g(C.balance));   /* Balance Due comes from column AL; falls back to the plain balance if AL is empty */
   const dpAmt = toNum(g(C.dpAmt)), insAmt = toNum(g(C.insAmt));
   const lateOk = g(C.lateStatus).toUpperCase() === "OK";
   const today = (ASOF && parseDate(ASOF, true)) || new Date(); today.setHours(0,0,0,0);
 
   const account = `<div class="sheet">
-    ${kv("MPL No.", esc(g(C.mpl)))}
-    ${kv("Name", esc(g(C.name)) || "—", "", "name")}
-    <div class="sec">CUSTOMER ACCOUNT SUMMARY</div>
-    ${kv("Invoice Value (Rs.)", money(invoice))}
-    ${kv("Total Paid (Rs.)", money(paid))}
-    ${kv("Balance Due (Rs.)", money(bal) + (bal < 0 ? ' <span class="sub">excess paid</span>' : ""), bal > 0 ? "red" : "")}
-    ${kv("Down Payment (Rs.)", money(dpAmt))}
-    ${kv("Down Payment Date", esc(showDate(g(C.dpDate))) || "—")}
-    ${kv("No. of Instalments", esc(g(C.nIns)) || "—")}
-    ${kv("Instalment Amt. (Rs.)", money(insAmt))}
-    ${kv("Product Type &amp; Category", productText(r))}
-    ${kv("Full Warranty Until", warranty(r, 0))}
-    ${kv("Service Warranty Until", warranty(r, 1))}
+    ${kv(t("mplNo"), esc(g(C.mpl)))}
+    ${kv(t("name"), esc(g(C.name)) || "—", "", "name")}
+    <div class="sec">${t("acctTitle")}</div>
+    ${kv(t("invoiceVal"), money(invoice))}
+    ${kv(t("invDate"), (invDateOf(r) ? esc(fmtDate(invDateOf(r))) : "—"))}
+    ${kv(t("totalPaid"), money(paid))}
+    ${kv(t("balDue"), money(bal) + (bal < 0 ? ` <span class="sub">${t("excess")}</span>` : ""), bal > 0 ? "red" : "")}
+    ${kv(t("dpAmt"), money(dpAmt))}
+    ${kv(t("dpDate"), esc(showDate(g(C.dpDate))) || "—")}
+    ${kv(t("nIns"), esc(g(C.nIns)) || "—")}
+    ${kv(t("insAmt"), money(insAmt))}
+    ${kv(t("prod"), productText(r))}
+    ${kv(t("wFull"), warranty(r, 0))}
+    ${kv(t("wSvc"), warranty(r, 1))}
   </div>`;
 
   let n = parseInt(g(C.nIns), 10);
@@ -261,98 +632,143 @@ function render(r){
   n = Math.min(6, Math.max(isNaN(n) ? 0 : n, lastPaid));
   const dp = parseDate(g(C.dpDate)) || parseDate(g(C.invDate));
   let rows = "";
+  const latePaidV = lateOk ? (toNum(g(C.latePaid)) || 0) : 0;
+  const dueAmt = insAmt != null && insAmt > 0 ? insAmt : null;
+  const alloc = (lateOk && dueAmt != null) ? allocate(
+    C.pay.map(([a, d]) => ({amt: toNum(g(a)) || 0, date: parseDate(g(d)), txt: g(d)})).filter(p => p.amt > 0),
+    latePaidV, Array.from({length:n}, () => dueAmt)) : null;
   for (let i = 0; i < n; i++){
     const [aCol, dCol] = C.pay[i];
-    const pAmt = toNum(g(aCol)), pDate = parseDate(g(dCol)), pTxt = g(dCol);
-    const dueAmt = insAmt != null && insAmt > 0 ? insAmt : null;
+    let pAmt = toNum(g(aCol)), pDate = parseDate(g(dCol)), pTxt = g(dCol), settled;
     let due = dp ? addMonths(dp, i + 1) : (!(pAmt > 0) && pDate ? pDate : null);
-    const rowBal = dueAmt != null ? Math.max(0, dueAmt - (pAmt || 0)) : null;
-    const settled = dueAmt != null && (pAmt || 0) >= dueAmt - 0.005;
+    let rowBal;
+    if (alloc){ const a = alloc[i];
+      pAmt = a.applied > 0.004 ? a.applied : 0; pDate = a.last ? a.last.date : null; pTxt = a.last ? a.last.txt : "";
+      settled = a.settled; rowBal = Math.max(0, dueAmt - a.applied); if (settled) rowBal = 0;
+    } else {
+      rowBal = dueAmt != null ? Math.max(0, dueAmt - (pAmt || 0)) : null;
+      settled = dueAmt != null && (pAmt || 0) >= dueAmt - 0.005;
+    }
     let tag = '<span class="tag none">—</span>';
     if (due){
       if (settled && pDate){ const d = daysBetween(due, pDate);
-        tag = d > 0 ? `<span class="tag late">Paid ${d} day${d > 1 ? "s" : ""} late</span>` : '<span class="tag ok">Paid on time</span>';
+        tag = d > 0 ? `<span class="tag late">${t("paidLate", d)}</span>` : `<span class="tag ok">${t("onTime")}</span>`;
       } else if (!settled && dueAmt != null){ const d = daysBetween(due, today);
-        tag = d > 0 ? `<span class="tag late">${d} day${d > 1 ? "s" : ""} overdue</span>`
-          : `<span class="tag warn">Due in ${-d} day${d < -1 ? "s" : ""}</span>`;
-      } else if (settled) tag = '<span class="tag ok">Paid</span>';
+        tag = d > 0 ? `<span class="tag late">${t("overdueTag", d)}</span>`
+          : `<span class="tag warn">${t("dueIn", -d)}</span>`;
+      } else if (settled) tag = `<span class="tag ok">${t("paidTag")}</span>`;
     }
-    rows += `<div class="ins"><div class="ins-t"><span>Instalment ${i+1}</span>${tag}</div>
+    rows += `<div class="ins"><div class="ins-t"><span>${t("instN", i+1)}</span>${tag}</div>
       <div class="ig num">
         <div>${plain(dueAmt)}<span class="d">${due ? fmtDate(due) : "—"}</span></div>
-        <div>${pAmt > 0 ? plain(pAmt) : "—"}<span class="d">${pAmt > 0 ? esc(showDate(pTxt)) || "—" : "—"}</span></div>
+        <div>${pAmt > 0 ? plain(pAmt) : "—"}<span class="d">${pAmt > 0 ? (pDate ? esc(fmtDate(pDate)) : esc(showDate(pTxt)) || "—") : "—"}</span></div>
         <div class="${rowBal > 0 ? "red" : ""}">${plain(rowBal)}<span class="d">&nbsp;</span></div>
       </div></div>`;
   }
-  const instal = `<div class="sheet"><div class="sec">MONTHLY INSTALMENT SUMMARY</div>
-    <div class="ihead"><div>Due (Rs.)</div><div>Paid (Rs.)</div><div>Balance (Rs.)</div></div>
-    ${rows || '<div class="note">No instalments recorded for this account.</div>'}</div>`;
+  const instal = `<div class="sheet"><div class="sec">${t("instTitle")}</div>
+    <div class="ihead"><div>${t("due")}</div><div>${t("paidH")}</div><div>${t("balH")}</div></div>
+    ${rows || `<div class="note">${t("noIns")}</div>`}
+    ${alloc && latePaidV > 0 ? `<div class="note">${t("allocNote", fmt(latePaidV))}</div>` : ""}</div>`;
 
   let lateHtml;
   if (lateOk){
-    const overdue = toNum(g(C.overdue)), gain = toNum(g(C.gain)), totalOver = toNum(g(C.totalOver));
-    const lPaid = toNum(g(C.latePaid)), disc = toNum(g(C.discount)), pending = toNum(g(C.running)), capPaid = toNum(g(C.capPaid));
-    const fin = (overdue != null && pending != null) ? overdue + pending : null;
-    lateHtml = kv("Total Overdue (Rs.)", money(overdue), overdue > 0 ? "red" : "") + kv("Late Charges (Rs.)", money(gain)) +
-      kv("Total Due (Rs.)", money(totalOver), totalOver > 0 ? "red" : "") + kv("Late Charges Paid (Rs.)", money(lPaid)) +
-      kv("Late Charges Discount (Rs.)", money(disc)) + kv("Pending Late Charges (Rs.)", money(pending), pending > 0 ? "red" : "") +
-      kv("Instalments Paid (Rs.)", money(capPaid)) + kv("Final Outstanding (Rs.)", money(fin), "", "strong" + (fin > 0 ? "" : " okrow"));
-  } else lateHtml = '<div class="note">Overdue and late charge details are not available for this account yet. Please contact us for a full statement.</div>';
+    const overdue = toNum(g(C.overdue)), totalOver = toNum(g(C.totalOver));
+    const lPaid = toNum(g(C.latePaid)), disc = toNum(g(C.discount)), pending = toNum(g(C.pendingLate));
+    const recv = toNum(g(C.received));
+    let fin = toNum(g(C.finalOut));
+    if (fin == null && invoice != null && recv != null && pending != null) fin = Math.max(0, invoice - recv + pending);
+    lateHtml = kv(t("lOverdue"), money(overdue), overdue > 0 ? "red" : "") +
+      kv(t("lTotal"), money(totalOver), totalOver > 0 ? "red" : "") +
+      kv(t("lPaid"), money(lPaid)) +
+      kv(t("lDisc"), money(disc)) +
+      kv(t("lPending"), money(pending), pending > 0 ? "red" : "") +
+      kv(t("lRecv"), money(recv)) +
+      kv(t("lFinal"), money(fin), "", "strong" + (fin != null && fin <= 0 ? " okrow" : ""));
+  } else lateHtml = `<div class="note">${t("lateNA")}</div>`;
 
-  const late = `<div class="sheet"><div class="sec late">OVERDUE &amp; LATE CHARGES SUMMARY</div>${lateHtml}</div>`;
-  out.innerHTML = `<div class="ph"><img src="logo.png" alt="NCC"><div><h2>CUSTOMER ACCOUNT SUMMARY</h2><p>${esc(g(C.mpl))} · ${esc(g(C.name))} · Printed ${esc(fmtDate(new Date()))}</p></div></div>
-    ${ASOF ? `<p class="asof">Interest calculated up to ${esc(showDate(ASOF) || ASOF)}</p>` : ""}
+  const late = `<div class="sheet"><div class="sec late">${t("lateTitle")}</div>${lateHtml}</div>`;
+  out.innerHTML = `<div class="ph"><img src="logo.png" alt="NCC"><div><h2>${t("acctTitle")}</h2><p>${esc(g(C.mpl))} · ${esc(g(C.name))} · ${t("printed")} ${esc(fmtDate(new Date()))} · v${CONFIG.VERSION}</p></div></div>
+    ${ASOF ? `<p class="asof">${t("asof", esc(showDate(ASOF) || ASOF))}</p>` : ""}
     ${account}${instal}${late}
-    <footer><button type="button" id="refresh">Refresh from sheet</button><button type="button" id="clear">New search</button></footer>`;
+    <footer><button type="button" id="refresh">${t("refresh")}</button><button type="button" id="clear">${t("clear")}</button></footer>`;
   prn.disabled = shr.disabled = false;
   $("refresh").onclick = () => search(mplIn.value, mobIn.value, true);
-  $("clear").onclick = () => { history.replaceState(null, "", location.href.split("#")[0]); out.innerHTML = START; lock(); mplIn.value = mobIn.value = ""; mplIn.focus(); };
-  window.scrollTo({top:0});
+  $("clear").onclick = () => { history.replaceState(null, "", location.href.split("#")[0]); LAST = null; show(vStart); mplIn.value = mobIn.value = ""; mplIn.focus(); };
+  if (/(^|&)debug=1/.test(location.hash.slice(1))){   /* diagnostics: add &debug=1 to the page link */
+    const L = i => { let x = "", n = i + 1; while (n > 0){ const k = (n - 1) % 26; x = String.fromCharCode(65 + k) + x; n = Math.floor((n - 1) / 26); } return x; };
+    const info = Object.entries(C).filter(([k]) => k !== "pay").map(([k, v]) => k + "=" + L(v) + " [" + clean(r[v]).slice(0, 18) + "]").join("\n");
+    out.insertAdjacentHTML("beforeend", `<pre style="font-size:11px;white-space:pre-wrap;background:#fff;border:1px solid #ccc;padding:8px;margin:12px 0">rows=${ROWS.length}\n${esc(info)}</pre>`);
+  }
 }
 
-const START = out.innerHTML;
-let LAST = null;
+/* ---------- views (re-drawn when the language changes) ---------- */
+let VIEW = null, LAST = null;
 function lock(){ prn.disabled = shr.disabled = true; }
-function toast(t){ const e = $("toast"); e.textContent = t; e.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => e.hidden = true, 2200); }
+function show(fn){ VIEW = fn; fn(); }
+const vStart = () => { lock(); out.innerHTML = `<div class="msg"><img src="support.png" alt=""><b>${t("startH")}</b>${t("startP")}</div>`; };
+const vBoth  = () => { lock(); out.innerHTML = `<div class="msg"><b>${t("bothH")}</b>${t("bothP")}</div>`; };
+const vNone  = () => { lock(); out.innerHTML = `<div class="msg"><img src="support.png" alt=""><b>${t("noneH")}</b>${t("noneP")}</div>`; };
+const vError = kind => () => { lock(); const k = {access:"eAccess", shape:"eShape", network:"eNet"}[kind] || "eOther";
+  out.innerHTML = `<div class="msg err"><b>${t(k+"H")}</b>${t(k+"P")}</div>`; };
+
+function applyLang(){
+  document.documentElement.lang = LANG;
+  document.title = t("docTitle");
+  $("ttl").innerHTML = t("title");
+  $("ver").textContent = (LANG === "si" ? t("version") + " " : "") + "v" + CONFIG.VERSION;
+  mplIn.placeholder = t("phMpl"); mplIn.setAttribute("aria-label", t("lblMpl"));
+  mobIn.placeholder = t("phMob"); mobIn.setAttribute("aria-label", t("lblMob"));
+  btn.textContent = btn.disabled ? t("loading") : t("search");
+  prn.textContent = t("print"); shr.textContent = t("share");
+  document.querySelectorAll(".lang button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === LANG)));
+  if (VIEW) VIEW();
+}
+function setLang(l){
+  LANG = l; try { localStorage.setItem("ncc_lang", l); } catch(e){}
+  applyLang(); syncHash();
+}
+document.querySelectorAll(".lang button").forEach(b => b.addEventListener("click", () => setLang(b.dataset.lang)));
+
+/* ---------- share / hash ---------- */
+function toast(m){ const e = $("toast"); e.textContent = m; e.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => e.hidden = true, 2200); }
+const hashFor = () => { const p = {mpl:LAST.mpl, mobile:LAST.mob}; if (LANG === "si") p.lang = "si"; return "#" + new URLSearchParams(p); };
+function syncHash(){ if (LAST) history.replaceState(null, "", location.href.split("#")[0] + hashFor()); }
 shr.addEventListener("click", async () => {
   if (!LAST) return;
-  const url = location.href.split("#")[0] + "#" + new URLSearchParams({mpl:LAST.mpl, mobile:LAST.mob});
-  try { if (navigator.share){ await navigator.share({title:"NCC – Customer Account Summary", url}); return; } }
+  const url = location.href.split("#")[0] + hashFor();
+  try { if (navigator.share){ await navigator.share({title:t("docTitle"), url}); return; } }
   catch(e){ if (e && e.name === "AbortError") return; }
-  try { await navigator.clipboard.writeText(url); toast("Link copied"); }
-  catch(e){ window.prompt("Copy this link", url); }
+  try { await navigator.clipboard.writeText(url); toast(t("copied")); }
+  catch(e){ window.prompt(t("copyPrompt"), url); }
 });
 function fromHash(){
-  const p = new URLSearchParams(location.hash.slice(1)), m = p.get("mpl"), b = p.get("mobile");
+  const p = new URLSearchParams(location.hash.slice(1)), m = p.get("mpl"), b = p.get("mobile"), l = p.get("lang");
+  if ((l === "si" || l === "en") && l !== LANG){ LANG = l; try { localStorage.setItem("ncc_lang", l); } catch(e){} applyLang(); }
   if (m && b){ mplIn.value = m; mobIn.value = b; search(m, b); return true; }
   return false;
 }
-function showError(kind){
-  const m = {
-    access:["Can't read the sheet","The Google Sheet must be shared as “Anyone with the link – Viewer”, and the tab names in CONFIG must match exactly."],
-    shape:["Sheet layout not recognised","The MPL-ACS tab does not look as expected. Check CONFIG.TABS.acs and that column E holds the MPL numbers."],
-    network:["Couldn't reach Google Sheets","Check your internet connection and try again."]
-  }[kind] || ["Something went wrong","Please try again."];
-  out.innerHTML = `<div class="msg err"><b>${m[0]}</b>${m[1]}</div>`; lock();
-}
 async function search(mplV, mobV, force){
-  if (!clean(mplV) || !normalizeMobile(mobV)){
-    out.innerHTML = `<div class="msg"><b>Enter both details</b>Type the MPL number and a Sri Lankan mobile number: 9 digits, 10 digits starting with 0, or +94 format.</div>`;
-    lock(); return;
-  }
-  btn.disabled = true; btn.textContent = "Loading…";
+  if (!clean(mplV) || !normalizeMobile(mobV)){ show(vBoth); return; }
+  btn.disabled = true; btn.textContent = t("loading");
   try {
     await load(force);
-    const r = find(mplV, mobV);
-    if (r){ LAST = {mpl:clean(mplV), mob:clean(mobV)}; render(r);
-      history.replaceState(null, "", location.href.split("#")[0] + "#" + new URLSearchParams({mpl:LAST.mpl, mobile:LAST.mob})); }
-    else { lock(); out.innerHTML = `<div class="msg"><img src="support.png" alt=""><b>No matching customer found</b>The MPL number and mobile number must both belong to the same account. Check both and try again, or contact NCC customer support.</div>`; }
-  } catch(e){ showError(e.message); }
-  finally { btn.disabled = false; btn.textContent = "Search"; }
+    const r = find(mplV, mobV);   /* 1st: instalment customers in MPL-ACS */
+    let slr = null;
+    if (!r && !inAcs(mplV)){      /* 2nd: cash-sale customers in MPL-SLR */
+      if (!SLR) throw (EXTRA_ERR || new Error("access"));
+      slr = findSlr(mplV, mobV);
+    }
+    if (r || slr){ LAST = {mpl:clean(mplV), mob:clean(mobV)}; show(() => r ? render(r) : renderInvoice(slr)); syncHash(); window.scrollTo({top:0}); }
+    else { LAST = null; show(vNone); }
+  } catch(e){ LAST = null; show(vError(e.message)); }
+  finally { btn.disabled = false; btn.textContent = t("search"); }
 }
 $("form").addEventListener("submit", e => { e.preventDefault(); search(mplIn.value, mobIn.value); document.activeElement.blur(); });
+window.addEventListener("beforeprint", () => { const d = new Date();
+  document.querySelectorAll(".pi-date").forEach(e => e.textContent = String(d.getDate()).padStart(2,"0") + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + d.getFullYear()); });
 prn.addEventListener("click", () => window.print());
 window.addEventListener("hashchange", fromHash);
+show(vStart); applyLang();
 if (!fromHash() && matchMedia("(hover:hover)").matches) mplIn.focus();
 </script>
 </body>
