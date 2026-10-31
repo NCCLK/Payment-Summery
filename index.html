@@ -166,7 +166,7 @@ const CONFIG = {
   PUBLISHED: { acs: "", slr: "", str: "" },
   /* seller details + fixed texts printed on the cash-sale invoice */
   SHOP: { name:"A-Z LAPTOPS", address:"'NEGOMBO CITY CENTRE' No: 198, St. Joseph's Street. Negombo.", phone:"071 533 5010", email:"negombocitycentre@gmail.com" },
-  BALANCE_COL: "AL",             /* "Balance Due (Rs.)" on the account summary is read from this sheet column (blank = use Invoice Value - Total Paid) */
+  BALANCE_COL: "AS",             /* "Balance Due (Rs.)" on the account summary is read from this sheet column (blank = use Invoice Value - Total Paid) */
   INVOICE_PREFIX: "NCC",         /* invoice no. = NCC + 4-letter code from OTHER 1 REF (column B, leading "BC" dropped) + last 4 digits of the MPL no. */
   PAYMENT_MODE: "Cash",
   TERMS: [
@@ -256,7 +256,6 @@ const I18N = {
   lOverdue:"Payments Overdue (Rs.)", lCharges:"Late Charges (Rs.)", lTotal:"Total Over Due (Rs.)", lPaid:"Late Charges Paid (Rs.)",
   lDisc:"Late Charges Discount (Rs.)", lPending:"Pending Late Charges (Rs.)", lRecv:"Total Payments Received (Rs.)", lFinal:"Final Outstanding (Rs.)",
   lateNA:"Overdue and late charge details are not available for this account yet. Please contact us for a full statement.",
-  allocNote:x=>`Payments are applied first to late charges (Rs. ${x} paid so far), then to earlier unpaid instalments, and only then to the current instalment.`,
   invTitle:"DIGITAL INVOICE", itemTitle:"ITEM DETAILS", amtTitle:"INVOICE AMOUNT", wTitle:"WARRANTY DETAILS",
   cpu:"Processor", gen:"Generation", ram:"RAM", storage:"Storage", screen:"Display Size",
   cpuV:n=>`Intel Core i${n}`, genV:n=>{const o=n%100,x=(o>=11&&o<=13)?"th":({1:"st",2:"nd",3:"rd"}[n%10]||"th");return `${n}${x} Generation`;}, gb:n=>`${n} GB`, tb:n=>`${n} TB`, inch:n=>`${n} inch`,
@@ -286,7 +285,6 @@ const I18N = {
   lOverdue:"කල් පසු වූ ගෙවීම් (රු.)", lCharges:"ප්‍රමාද ගාස්තු (රු.)", lTotal:"මුළු කල් පසු මුදල (රු.)", lPaid:"ගෙවූ ප්‍රමාද ගාස්තු (රු.)",
   lDisc:"ප්‍රමාද ගාස්තු වට්ටම (රු.)", lPending:"ගෙවිය යුතු ප්‍රමාද ගාස්තු (රු.)", lRecv:"ලැබුණු මුළු ගෙවීම් (රු.)", lFinal:"අවසාන හිඟ මුදල (රු.)",
   lateNA:"මෙම ගිණුම සඳහා කල් පසු වූ ගෙවීම් සහ ප්‍රමාද ගාස්තු විස්තර තවම නොමැත. සම්පූර්ණ ප්‍රකාශයක් සඳහා කරුණාකර අප අමතන්න.",
-  allocNote:x=>`ගෙවීම් මුලින්ම ප්‍රමාද ගාස්තු සඳහා (මෙතෙක් රු. ${x} ගෙවා ඇත) ද, ඉන්පසු පෙර හිඟ වාරික සඳහා ද, අවසානයේ පමණක් වත්මන් වාරිකය සඳහා ද යොදනු ලැබේ.`,
   invTitle:"ඩිජිටල් ඉන්වොයිසිය", itemTitle:"භාණ්ඩ විස්තර", amtTitle:"ඉන්වොයිස් මුදල", wTitle:"වගකීම් විස්තර",
   cpu:"ප්‍රොසෙසරය", gen:"පරම්පරාව", ram:"RAM මතකය", storage:"ගබඩා ධාරිතාව", screen:"තිරයේ ප්‍රමාණය",
   cpuV:n=>`Intel Core i${n}`, genV:n=>`${n} වන පරම්පරාව`, gb:n=>`${n} GB`, tb:n=>`${n} TB`, inch:n=>`අඟල් ${n}`,
@@ -438,7 +436,7 @@ const kv = (k, v, cls="", row="") => `<div class="kv ${row}"><div class="k">${k}
 
 function productText(r){
   const i = INFO[key(r[C.mpl])]; if (!i) return "—";
-  const c = CAT[i.batch] || CAT[i.serial]; return c ? t("laptop") + " / " + esc(titleCase(c)) : t("laptop");
+  const c = CAT[i.batch] || CAT[i.serial]; return (c ? t("laptop") + " | " + esc(c.toUpperCase()) : t("laptop")).toUpperCase();
 }
 const invDateOf = r => parseDate(r[C.invDate]) || parseDate((INFO[key(r[C.mpl])] || {}).inv);
 function warrantyFor(mplKey, d, idx){   /* warranty always counts from the invoice date */
@@ -572,7 +570,7 @@ function renderInvoice(r){
     ${kv(t("saleType"), t("cashSale"))}
   </div>`;
   const items = `<div class="sheet"><div class="sec">${t("itemTitle")}</div>
-    ${kv(t("prod"), t("laptop") + (cat ? " / " + esc(titleCase(cat)) : ""))}
+    ${kv(t("prod"), (t("laptop") + (cat ? " | " + esc(cat.toUpperCase()) : "")).toUpperCase())}
     ${opt(t("model"), g(S.model))}${specRows(g(S.spec)) || opt(t("spec"), g(S.spec))}${opt(t("serial"), g(S.serial))}${opt(t("accessories"), accList(g(S.accessories), g(S.spec)).join(", "))}
   </div>`;
   const amt = `<div class="sheet"><div class="sec">${t("amtTitle")}</div>
@@ -593,14 +591,6 @@ function renderInvoice(r){
   $("clear").onclick = () => { history.replaceState(null, "", location.href.split("#")[0]); LAST = null; show(vStart); mplIn.value = mobIn.value = ""; mplIn.focus(); };
 }
 
-/* Payment allocation: each payment first clears late charges, then the oldest unpaid instalment, then the next ones */
-function allocate(pays, latePaid, dues){
-  let lateLeft = latePaid || 0; const pool = [];
-  for (const p of pays){ const l = Math.min(p.amt, lateLeft); lateLeft -= l; const cap = p.amt - l; if (cap > 0.004) pool.push({amt:cap, date:p.date, txt:p.txt}); }
-  return dues.map(due => { let need = due, applied = 0, last = null;
-    while (need > 0.004 && pool.length){ const c = pool[0], take = Math.min(c.amt, need); applied += take; need -= take; c.amt -= take; last = c; if (c.amt <= 0.004) pool.shift(); }
-    return {applied, last, settled: need < 0.5}; });
-}
 function render(r){
   const g = i => clean(r[i]);
   const invoice = toNum(g(C.invoice)), paid = toNum(g(C.paid));
@@ -614,14 +604,14 @@ function render(r){
     ${kv(t("mplNo"), esc(g(C.mpl)))}
     ${kv(t("name"), esc(g(C.name)) || "—", "", "name")}
     <div class="sec">${t("acctTitle")}</div>
-    ${kv(t("invoiceVal"), money(invoice))}
+    ${kv(t("invoiceVal"), plain(invoice))}
     ${kv(t("invDate"), (invDateOf(r) ? esc(fmtDate(invDateOf(r))) : "—"))}
-    ${kv(t("totalPaid"), money(paid))}
-    ${kv(t("balDue"), money(bal) + (bal < 0 ? ` <span class="sub">${t("excess")}</span>` : ""), bal > 0 ? "red" : "")}
-    ${kv(t("dpAmt"), money(dpAmt))}
+    ${kv(t("totalPaid"), plain(paid))}
+    ${kv(t("balDue"), plain(bal) + (bal < 0 ? ` <span class="sub">${t("excess")}</span>` : ""), bal > 0 ? "red" : "")}
+    ${kv(t("dpAmt"), plain(dpAmt))}
     ${kv(t("dpDate"), esc(showDate(g(C.dpDate))) || "—")}
     ${kv(t("nIns"), esc(g(C.nIns)) || "—")}
-    ${kv(t("insAmt"), money(insAmt))}
+    ${kv(t("insAmt"), plain(insAmt))}
     ${kv(t("prod"), productText(r))}
     ${kv(t("wFull"), warranty(r, 0))}
     ${kv(t("wSvc"), warranty(r, 1))}
@@ -632,23 +622,13 @@ function render(r){
   n = Math.min(6, Math.max(isNaN(n) ? 0 : n, lastPaid));
   const dp = parseDate(g(C.dpDate)) || parseDate(g(C.invDate));
   let rows = "";
-  const latePaidV = lateOk ? (toNum(g(C.latePaid)) || 0) : 0;
-  const dueAmt = insAmt != null && insAmt > 0 ? insAmt : null;
-  const alloc = (lateOk && dueAmt != null) ? allocate(
-    C.pay.map(([a, d]) => ({amt: toNum(g(a)) || 0, date: parseDate(g(d)), txt: g(d)})).filter(p => p.amt > 0),
-    latePaidV, Array.from({length:n}, () => dueAmt)) : null;
   for (let i = 0; i < n; i++){
     const [aCol, dCol] = C.pay[i];
-    let pAmt = toNum(g(aCol)), pDate = parseDate(g(dCol)), pTxt = g(dCol), settled;
+    const pAmt = toNum(g(aCol)), pDate = parseDate(g(dCol)), pTxt = g(dCol);
+    const dueAmt = insAmt != null && insAmt > 0 ? insAmt : null;
     let due = dp ? addMonths(dp, i + 1) : (!(pAmt > 0) && pDate ? pDate : null);
-    let rowBal;
-    if (alloc){ const a = alloc[i];
-      pAmt = a.applied > 0.004 ? a.applied : 0; pDate = a.last ? a.last.date : null; pTxt = a.last ? a.last.txt : "";
-      settled = a.settled; rowBal = Math.max(0, dueAmt - a.applied); if (settled) rowBal = 0;
-    } else {
-      rowBal = dueAmt != null ? Math.max(0, dueAmt - (pAmt || 0)) : null;
-      settled = dueAmt != null && (pAmt || 0) >= dueAmt - 0.005;
-    }
+    const rowBal = dueAmt != null ? Math.max(0, dueAmt - (pAmt || 0)) : null;
+    const settled = dueAmt != null && (pAmt || 0) >= dueAmt - 0.005;
     let tag = '<span class="tag none">—</span>';
     if (due){
       if (settled && pDate){ const d = daysBetween(due, pDate);
@@ -661,14 +641,13 @@ function render(r){
     rows += `<div class="ins"><div class="ins-t"><span>${t("instN", i+1)}</span>${tag}</div>
       <div class="ig num">
         <div>${plain(dueAmt)}<span class="d">${due ? fmtDate(due) : "—"}</span></div>
-        <div>${pAmt > 0 ? plain(pAmt) : "—"}<span class="d">${pAmt > 0 ? (pDate ? esc(fmtDate(pDate)) : esc(showDate(pTxt)) || "—") : "—"}</span></div>
+        <div>${pAmt > 0 ? plain(pAmt) : "—"}<span class="d">${pAmt > 0 ? esc(showDate(pTxt)) || "—" : "—"}</span></div>
         <div class="${rowBal > 0 ? "red" : ""}">${plain(rowBal)}<span class="d">&nbsp;</span></div>
       </div></div>`;
   }
   const instal = `<div class="sheet"><div class="sec">${t("instTitle")}</div>
     <div class="ihead"><div>${t("due")}</div><div>${t("paidH")}</div><div>${t("balH")}</div></div>
-    ${rows || `<div class="note">${t("noIns")}</div>`}
-    ${alloc && latePaidV > 0 ? `<div class="note">${t("allocNote", fmt(latePaidV))}</div>` : ""}</div>`;
+    ${rows || `<div class="note">${t("noIns")}</div>`}</div>`;
 
   let lateHtml;
   if (lateOk){
@@ -681,9 +660,7 @@ function render(r){
       kv(t("lTotal"), money(totalOver), totalOver > 0 ? "red" : "") +
       kv(t("lPaid"), money(lPaid)) +
       kv(t("lDisc"), money(disc)) +
-      kv(t("lPending"), money(pending), pending > 0 ? "red" : "") +
-      kv(t("lRecv"), money(recv)) +
-      kv(t("lFinal"), money(fin), "", "strong" + (fin != null && fin <= 0 ? " okrow" : ""));
+      kv(t("lPending"), money(pending), pending > 0 ? "red" : "");
   } else lateHtml = `<div class="note">${t("lateNA")}</div>`;
 
   const late = `<div class="sheet"><div class="sec late">${t("lateTitle")}</div>${lateHtml}</div>`;
